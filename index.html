@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>활자소 — 일본어 어휘 연습</title>
+<meta name="description" content="가나/한자 조각을 조판하듯 배열해 일본어 단어를 완성하는 어휘 연습 게임">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Old+Mincho:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --washi:#EEE6D6;
+    --washi-deep:#E4D9C2;
+    --sumi:#2A2823;
+    --sumi-soft:#5A554A;
+    --ai:#26466F;
+    --ai-deep:#152E4D;
+    --ai-pale:#DCE4EC;
+    --beni:#B14A34;
+    --beni-deep:#8C3521;
+    --kin:#B08B3C;
+    --moss:#5E7452;
+    --paper-line: rgba(42,40,35,0.08);
+    --shadow-block: 0 2px 0 rgba(42,40,35,0.25), 0 6px 14px rgba(42,40,35,0.18);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{margin:0; padding:0; height:100%;}
+  body{
+    font-family:'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif;
+    color:var(--sumi);
+    background:
+      radial-gradient(circle at 15% 8%, rgba(255,255,255,0.35), transparent 40%),
+      radial-gradient(circle at 85% 92%, rgba(42,40,35,0.05), transparent 45%),
+      var(--washi);
+    min-height:100%;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    opacity:.5;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(42,40,35,0.025) 0px, transparent 1px, transparent 3px),
+      repeating-linear-gradient(90deg, rgba(42,40,35,0.02) 0px, transparent 1px, transparent 3px);
+  }
+  .app{position:relative; z-index:1; max-width:480px; margin:0 auto; min-height:100vh; padding:0 0 40px;}
+
+  /* ---------- Header ---------- */
+  header.topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 20px 14px;
+    border-bottom:1px solid var(--paper-line);
+  }
+  .brand{display:flex; align-items:baseline; gap:10px;}
+  .brand .seal{
+    width:34px;height:34px;border-radius:6px;
+    background:var(--beni);
+    color:#F4EEE0;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Zen Old Mincho', serif; font-weight:700; font-size:17px;
+    box-shadow: 0 2px 0 var(--beni-deep);
+    transform:rotate(-3deg);
+  }
+  .brand h1{
+    font-family:'Shippori Mincho', serif; font-weight:800;
+    font-size:21px; letter-spacing:.02em; margin:0; color:var(--ai-deep);
+  }
+  .brand .sub{font-size:10px; letter-spacing:.18em; color:var(--sumi-soft); text-transform:uppercase; display:block; margin-top:1px;}
+  .topbar .icon-btn{
+    background:none;border:none; font-size:19px; color:var(--ai-deep); padding:6px; cursor:pointer;
+  }
+  .topbar .icons{display:flex; gap:2px;}
+
+  /* ---------- Screens ---------- */
+  .screen{display:none; padding:22px 20px;}
+  .screen.active{display:block; animation:fadeIn .25s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+
+  .hero-line{
+    font-family:'Shippori Mincho', serif; font-size:23px; font-weight:700; line-height:1.5;
+    color:var(--sumi); margin:4px 0 8px;
+  }
+  .hero-line em{font-style:normal; color:var(--beni); border-bottom:2px solid var(--beni); padding-bottom:1px;}
+  .hero-desc{font-size:13px; color:var(--sumi-soft); line-height:1.65; margin:0 0 26px;}
+
+  /* level select */
+  .level-list{display:flex; flex-direction:column; gap:10px; margin-bottom:22px;}
+  .level-card{
+    display:flex; align-items:center; gap:14px;
+    background:#F7F2E7; border:1px solid var(--paper-line); border-radius:10px;
+    padding:13px 14px; cursor:pointer; text-align:left;
+    box-shadow: 0 1px 0 rgba(42,40,35,0.06);
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  .level-card:active{transform: scale(.98);}
+  .level-card.selected{
+    border-color:var(--ai); background:var(--ai-pale);
+    box-shadow: inset 0 0 0 1px var(--ai);
+  }
+  .level-glyph{
+    width:44px; height:44px; border-radius:8px; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Shippori Mincho', serif; font-size:20px; font-weight:700;
+    background:var(--ai-deep); color:#EFE7D6;
+  }
+  .level-card.selected .level-glyph{background:var(--beni); color:#F7EEDF;}
+  .level-body{flex:1; min-width:0;}
+  .level-name{font-weight:700; font-size:14.5px; color:var(--sumi);}
+  .level-meta{font-size:11.5px; color:var(--sumi-soft); margin-top:2px;}
+  .level-check{width:20px; height:20px; border-radius:50%; border:1.5px solid #C9BFA6; flex:0 0 auto;}
+  .level-card.selected .level-check{background:var(--ai); border-color:var(--ai); position:relative;}
+  .level-card.selected .level-check::after{
+    content:"✓"; color:#fff; font-size:12px; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  }
+
+  /* count stepper */
+  .panel{
+    background:#F7F2E7; border:1px solid var(--paper-line); border-radius:12px;
+    padding:16px 16px 14px; margin-bottom:16px;
+  }
+  .panel-row{display:flex; align-items:center; justify-content:space-between;}
+  .panel-label{font-size:12.5px; color:var(--sumi-soft);}
+  .panel-value{font-family:'Shippori Mincho', serif; font-weight:700; font-size:13px; color:var(--ai-deep);}
+  .stepper{display:flex; align-items:center; gap:14px; margin-top:10px;}
+  .step-btn{
+    width:38px;height:38px;border-radius:8px; border:none; background:var(--ai-deep); color:#F0E9D8;
+    font-size:18px; cursor:pointer; box-shadow: 0 2px 0 var(--ai-deep) inset; 
+  }
+  .step-btn:active{transform:scale(.94);}
+  .step-count{flex:1; text-align:center; font-family:'Shippori Mincho', serif; font-size:26px; font-weight:800; color:var(--sumi);}
+
+  .toggle-row{display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:14px; border-top:1px solid var(--paper-line);}
+  .toggle{
+    width:44px; height:25px; border-radius:20px; background:#D8CDB2; position:relative; cursor:pointer; flex:0 0 auto;
+    transition: background .15s;
+  }
+  .toggle.on{background:var(--moss);}
+  .toggle::after{
+    content:""; position:absolute; top:2px; left:2px; width:21px; height:21px; border-radius:50%; background:#fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,.3); transition: transform .15s;
+  }
+  .toggle.on::after{transform:translateX(19px);}
+
+  .btn-primary{
+    width:100%; padding:15px; border:none; border-radius:11px;
+    background:var(--beni); color:#F8EFDF;
+    font-family:'Zen Kaku Gothic New', sans-serif; font-weight:700; font-size:15px; letter-spacing:.03em;
+    cursor:pointer; box-shadow: var(--shadow-block);
+    margin-top:4px;
+  }
+  .btn-primary:active{transform:translateY(2px); box-shadow:0 1px 0 rgba(42,40,35,.25);}
+  .btn-primary:disabled{opacity:.4; box-shadow:none;}
+  .btn-secondary{
+    width:100%; padding:12px; border-radius:10px; margin-top:10px;
+    background:none; border:1px solid #C9BFA6; color:var(--sumi-soft); font-size:13px; font-weight:600; cursor:pointer;
+  }
+  .link-row{display:flex; gap:8px; margin-top:14px;}
+  .link-row button{
+    flex:1; padding:10px; border-radius:9px; border:1px solid var(--paper-line); background:#F7F2E7;
+    font-size:12px; color:var(--ai-deep); font-weight:600; cursor:pointer;
+  }
+
+  /* ---------- Game screen ---------- */
+  .game-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
+  .prog-pill{font-family:'Shippori Mincho', serif; font-size:12.5px; color:var(--sumi-soft);}
+  .timer-pill{
+    font-family:'Shippori Mincho', serif; font-weight:700; font-size:15px; color:var(--ai-deep);
+    background:var(--ai-pale); border-radius:8px; padding:4px 10px; letter-spacing:.02em;
+  }
+  .timer-pill.low{color:var(--beni); background:#F3DCD4;}
+  .score-pill{font-family:'Shippori Mincho', serif; font-size:12.5px; color:var(--kin); font-weight:700;}
+
+  .progress-track{height:5px; background:#E2D8C1; border-radius:4px; overflow:hidden; margin:8px 0 22px;}
+  .progress-fill{height:100%; background:var(--ai); border-radius:4px; transition: width .3s;}
+
+  .prompt-card{
+    background:#F7F2E7; border:1px solid var(--paper-line); border-radius:14px;
+    padding:26px 18px 22px; text-align:center; margin-bottom:20px; position:relative;
+    box-shadow: 0 1px 0 rgba(42,40,35,.06);
+  }
+  .prompt-tag{
+    position:absolute; top:10px; left:12px; font-size:10px; letter-spacing:.14em; color:var(--sumi-soft); text-transform:uppercase;
+  }
+  .speak-btn{
+    position:absolute; top:8px; right:10px; width:32px; height:32px; border-radius:50%;
+    background:var(--ai-pale); border:1px solid var(--paper-line); color:var(--ai-deep);
+    font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .speak-btn:active{transform:scale(.92);}
+  .speak-btn.speaking{background:var(--beni); color:#F7EEDF; animation: pulseSpeak .5s ease infinite alternate;}
+  @keyframes pulseSpeak{from{opacity:1;} to{opacity:.65;}}
+  .prompt-kanji{font-family:'Shippori Mincho', serif; font-weight:800; font-size:40px; color:var(--sumi); line-height:1.2;}
+  .prompt-meaning{font-size:15px; color:var(--ai-deep); font-weight:700; margin-top:6px;}
+  .prompt-meaning.only{font-family:'Shippori Mincho', serif; font-size:22px; font-weight:700; color:var(--sumi); margin-top:2px;}
+
+  .answer-slot{
+    display:flex; justify-content:center; flex-wrap:wrap; gap:6px; min-height:52px;
+    margin-bottom:18px; align-items:center;
+  }
+  .a-block{
+    width:42px; height:48px; border-radius:7px;
+    background: linear-gradient(160deg, #33507A, var(--ai-deep));
+    color:#F1E9D8; display:flex; align-items:center; justify-content:center;
+    font-family:'Shippori Mincho', serif; font-size:19px; font-weight:700;
+    box-shadow: var(--shadow-block);
+    animation: dropIn .18s ease;
+  }
+  .a-block.empty{background:transparent; box-shadow:inset 0 0 0 1.5px dashed #C9BFA6; color:transparent;}
+  @keyframes dropIn{from{transform:translateY(-8px) scale(.85); opacity:0;} to{transform:none; opacity:1;}}
+
+  .tile-tray{display:flex; flex-wrap:wrap; gap:9px; justify-content:center; margin-bottom:18px;}
+  .k-tile{
+    width:50px; height:56px; border-radius:8px; cursor:pointer;
+    background: linear-gradient(160deg, #FBF6E9, #EDE2C6);
+    border:1px solid #D9CBA4;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Shippori Mincho', serif; font-size:21px; font-weight:700; color:var(--sumi);
+    box-shadow: 0 2px 0 #C9B686, 0 5px 10px rgba(42,40,35,0.14);
+    position:relative;
+    transition: transform .1s ease, opacity .15s ease;
+  }
+  .k-tile::before{
+    content:""; position:absolute; inset:3px; border-radius:5px;
+    background-image: repeating-linear-gradient(100deg, rgba(150,120,60,0.06) 0px, transparent 2px, transparent 6px);
+    pointer-events:none;
+  }
+  .k-tile:active{transform:translateY(2px) scale(.96); box-shadow:0 0 0 #C9B686;}
+  .k-tile.used{opacity:0; pointer-events:none; transform:scale(.7);}
+  .k-tile.hint{background: linear-gradient(160deg, #F3DCD4, #E7C3B7); border-color:var(--beni);}
+
+  .action-row{display:flex; gap:10px; margin-bottom:8px;}
+  .ghost-btn{
+    flex:1; padding:11px; border-radius:9px; border:1px solid #C9BFA6; background:none;
+    font-size:12.5px; font-weight:700; color:var(--sumi-soft); cursor:pointer;
+  }
+  .ghost-btn.warn{color:var(--beni); border-color:#DCB6A9;}
+  .ghost-btn:disabled{opacity:.35;}
+
+  .feedback-flash{
+    position:fixed; left:50%; top:38%; transform:translate(-50%,-50%) scale(.7); z-index:50;
+    font-family:'Zen Old Mincho', serif; font-weight:700; font-size:15px; color:#F7EEDF;
+    background:var(--beni); border-radius:10px; padding:14px 26px; opacity:0; pointer-events:none;
+    box-shadow:0 8px 24px rgba(42,40,35,.3);
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+  }
+  .feedback-flash .stamp{font-size:30px;}
+  .feedback-flash.show{animation: stampIn .55s cubic-bezier(.2,1.4,.4,1) forwards;}
+  @keyframes stampIn{
+    0%{opacity:0; transform:translate(-50%,-50%) scale(.4) rotate(-8deg);}
+    55%{opacity:1; transform:translate(-50%,-50%) scale(1.08) rotate(2deg);}
+    75%{transform:translate(-50%,-50%) scale(1) rotate(0deg);}
+    100%{opacity:0; transform:translate(-50%,-50%) scale(1) rotate(0deg);}
+  }
+  .feedback-flash.miss{background:var(--sumi); }
+
+  .shake{animation: shakeAnim .35s;}
+  @keyframes shakeAnim{
+    0%,100%{transform:translateX(0);} 20%{transform:translateX(-7px);} 40%{transform:translateX(6px);}
+    60%{transform:translateX(-5px);} 80%{transform:translateX(4px);}
+  }
+
+  /* ---------- Complete screen ---------- */
+  .complete-seal{
+    width:78px;height:78px;border-radius:50%; background:var(--beni); margin:6px auto 16px;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 3px 0 var(--beni-deep);
+    font-family:'Zen Old Mincho', serif; color:#F7EEDF; font-size:28px; font-weight:700;
+  }
+  .stat-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:18px 0 22px;}
+  .stat-box{background:#F7F2E7; border:1px solid var(--paper-line); border-radius:10px; padding:12px 6px; text-align:center;}
+  .stat-num{font-family:'Shippori Mincho', serif; font-weight:800; font-size:19px; color:var(--ai-deep);}
+  .stat-label{font-size:10px; color:var(--sumi-soft); margin-top:3px;}
+  .review-list{list-style:none; margin:0 0 18px; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .review-item{
+    display:flex; justify-content:space-between; align-items:center;
+    background:#F7F2E7; border:1px solid var(--paper-line); border-radius:9px; padding:10px 13px; font-size:13px;
+  }
+  .review-item .rk{font-family:'Shippori Mincho', serif; font-weight:700; color:var(--sumi);}
+  .review-item .rm{color:var(--sumi-soft); font-size:11.5px;}
+
+  /* ---------- Modals ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(20,18,14,.55); z-index:80; display:none;
+    align-items:flex-end; justify-content:center;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal-sheet{
+    width:100%; max-width:480px; background:var(--washi); border-radius:18px 18px 0 0;
+    padding:20px 20px 26px; max-height:78vh; overflow-y:auto;
+    animation: slideUp .22s ease;
+  }
+  @keyframes slideUp{from{transform:translateY(30px); opacity:0;} to{transform:none; opacity:1;}}
+  .modal-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;}
+  .modal-head h3{font-family:'Shippori Mincho', serif; font-size:16px; margin:0; color:var(--ai-deep);}
+  .modal-head button{background:none; border:none; font-size:20px; color:var(--sumi-soft); cursor:pointer;}
+  .lb-row{display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--paper-line); font-size:13px;}
+  .lb-rank{width:22px; font-family:'Shippori Mincho', serif; font-weight:800; color:var(--kin);}
+  .lb-name{flex:1; font-weight:600;}
+  .lb-score{font-family:'Shippori Mincho', serif; font-weight:700; color:var(--ai-deep);}
+  .empty-note{font-size:12.5px; color:var(--sumi-soft); text-align:center; padding:24px 10px; line-height:1.7;}
+
+  .pause-center{
+    position:fixed; inset:0; z-index:70; display:none; align-items:center; justify-content:center;
+    background:rgba(20,18,14,.55);
+  }
+  .pause-center.show{display:flex;}
+  .pause-box{background:var(--washi); border-radius:14px; padding:26px 24px; width:82%; max-width:300px; text-align:center;}
+  .pause-box h3{font-family:'Shippori Mincho', serif; margin:0 0 18px; color:var(--ai-deep);}
+  .pause-box .btn-primary{margin-bottom:8px;}
+
+  footer.credit{text-align:center; font-size:10.5px; color:var(--sumi-soft); padding:22px 20px 4px; letter-spacing:.04em;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="seal">活</div>
+      <div>
+        <h1>활자소</h1>
+        <span class="sub">Kana Katsuji · Vocab Practice</span>
+      </div>
+    </div>
+    <div class="icons">
+      <button class="icon-btn" onclick="openModal('history')" title="지난 기록">📖</button>
+      <button class="icon-btn" onclick="openModal('leaderboard')" title="순위">🏆</button>
+    </div>
+  </header>
+
+  <!-- ============ HOME SCREEN ============ -->
+  <section id="screen-home" class="screen active">
+    <p class="hero-line">활자 조각을 <em>조판</em>하듯 배열해<br>일본어 단어를 완성하세요.</p>
+    <p class="hero-desc">레벨을 고르면 그 레벨의 단어 중에서 무작위로 출제됩니다. 타이머가 흐르는 동안 흩어진 가나 조각을 순서대로 눌러 단어를 조립하세요.</p>
+
+    <div class="level-list" id="levelList"></div>
+
+    <div class="panel">
+      <div class="panel-row">
+        <span class="panel-label">한 판에 나올 단어 수</span>
+        <span class="panel-value" id="lessonCountLabel">레슨 단어: 0개</span>
+      </div>
+      <div class="stepper">
+        <button class="step-btn" onclick="changeCount(-1)">−</button>
+        <div class="step-count" id="countDisplay">18</div>
+        <button class="step-btn" onclick="changeCount(1)">+</button>
+      </div>
+      <div class="toggle-row">
+        <span class="panel-label">여유 모드 (타이머 없음)</span>
+        <div class="toggle" id="freeToggle" onclick="toggleFree()"></div>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="startBtn" onclick="startGame()">연습 시작</button>
+    <div class="link-row">
+      <button onclick="openModal('history')">지난 기록 보기</button>
+      <button onclick="openModal('leaderboard')">순위 보기</button>
+    </div>
+  </section>
+
+  <!-- ============ GAME SCREEN ============ -->
+  <section id="screen-game" class="screen">
+    <div class="game-top">
+      <span class="prog-pill" id="progLabel">1 / 18</span>
+      <span class="timer-pill" id="timerLabel">⏱ 0:00</span>
+      <span class="score-pill" id="scoreLabel">0 pts</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+
+    <div class="prompt-card">
+      <span class="prompt-tag" id="promptTag">HIRAGANA</span>
+      <button class="speak-btn" id="speakBtn" onclick="speakCurrent()" title="발음 듣기">🔊</button>
+      <div id="promptMain"></div>
+    </div>
+
+    <div class="answer-slot" id="answerSlot"></div>
+    <div class="tile-tray" id="tileTray"></div>
+
+    <div class="action-row">
+      <button class="ghost-btn" id="hintBtn" onclick="useHint()">🔩 글자 공개 3회 남음</button>
+      <button class="ghost-btn" onclick="clearAnswer()">지우기</button>
+      <button class="ghost-btn warn" onclick="togglePause()">일시정지</button>
+    </div>
+  </section>
+
+  <!-- ============ COMPLETE SCREEN ============ -->
+  <section id="screen-complete" class="screen">
+    <div class="complete-seal">完</div>
+    <p class="hero-line" style="text-align:center;">완성!</p>
+    <p class="hero-desc" style="text-align:center;" id="completeSub">0 / 18개 단어 완성</p>
+
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-num" id="statScore">0</div><div class="stat-label">POINTS</div></div>
+      <div class="stat-box"><div class="stat-num" id="statTime">0:00</div><div class="stat-label">완료 시간</div></div>
+      <div class="stat-box"><div class="stat-num" id="statAcc">100%</div><div class="stat-label">정확도</div></div>
+    </div>
+
+    <div id="reviewWrap">
+      <p class="panel-label" style="margin:0 0 8px;">다시 볼 단어</p>
+      <ul class="review-list" id="reviewList"></ul>
+    </div>
+
+    <input id="nameInput" placeholder="이름 (순위 등록용)" style="width:100%; padding:12px; border-radius:9px; border:1px solid #C9BFA6; background:#F7F2E7; font-size:13px; margin-bottom:10px; font-family:inherit;">
+    <button class="btn-primary" onclick="submitScore()">순위 등록</button>
+    <button class="btn-secondary" onclick="shareScore()">점수 공유</button>
+    <div class="link-row">
+      <button onclick="retryMissed()">새 문제 다시 도전</button>
+      <button onclick="goHome()">처음으로</button>
+    </div>
+  </section>
+
+  <footer class="credit">MATAMO LAB · 活字所 KANA FORGE</footer>
+</div>
+
+<!-- Pause overlay -->
+<div class="pause-center" id="pauseOverlay">
+  <div class="pause-box">
+    <h3>일시정지</h3>
+    <button class="btn-primary" onclick="togglePause()">계속하기</button>
+    <button class="ghost-btn" style="margin-bottom:8px;" onclick="restartLesson()">다시 시작</button>
+    <button class="ghost-btn warn" onclick="goHome()">처음으로</button>
+  </div>
+</div>
+
+<!-- History modal -->
+<div class="modal-overlay" id="modal-history">
+  <div class="modal-sheet">
+    <div class="modal-head"><h3>지난 기록</h3><button onclick="closeModal('history')">✕</button></div>
+    <div id="historyBody"></div>
+  </div>
+</div>
+
+<!-- Leaderboard modal -->
+<div class="modal-overlay" id="modal-leaderboard">
+  <div class="modal-sheet">
+    <div class="modal-head"><h3>순위표</h3><button onclick="closeModal('leaderboard')">✕</button></div>
+    <div id="leaderboardBody"></div>
+    <p class="empty-note" style="margin-top:6px;">※ 이 순위표는 이번 세션 동안만 유지됩니다.<br>구글 시트와 연동하려면 코드 상단의 SCRIPT_URL을 설정하세요.</p>
+  </div>
+</div>
+
+<div class="feedback-flash" id="feedbackFlash"></div>
+
+<script>
+/* =========================================================
+   활자소 — Kana Forge Vocab
+   구글 앱스 스크립트 연동을 쓰려면 아래에 배포 URL을 넣으세요.
+   (word-forge-vocab.html과 동일한 방식의 백엔드를 그대로 재사용 가능)
+========================================================= */
+const SCRIPT_URL = ""; // 예: "https://script.google.com/macros/s/XXXX/exec"
+
+/* ---------- Word data ---------- */
+const LEVELS = {
+  hiragana: {
+    name: "히라가나 기초", glyph: "あ", tag: "HIRAGANA",
+    desc: "받침 없는 기초 명사",
+    words: [
+      {reading:"あさ", meaning:"아침"}, {reading:"ひる", meaning:"낮 / 점심"},
+      {reading:"よる", meaning:"밤"}, {reading:"みず", meaning:"물"},
+      {reading:"やま", meaning:"산"}, {reading:"かわ", meaning:"강"},
+      {reading:"そら", meaning:"하늘"}, {reading:"はな", meaning:"꽃"},
+      {reading:"とり", meaning:"새"}, {reading:"いぬ", meaning:"개"},
+      {reading:"ねこ", meaning:"고양이"}, {reading:"さかな", meaning:"물고기"},
+      {reading:"くるま", meaning:"자동차"}, {reading:"たまご", meaning:"계란"},
+      {reading:"りんご", meaning:"사과"}, {reading:"さくら", meaning:"벚꽃"},
+      {reading:"ともだち", meaning:"친구"}, {reading:"ありがとう", meaning:"고맙습니다"}
+    ]
+  },
+  katakana: {
+    name: "가타카나 외래어", glyph: "ア", tag: "KATAKANA",
+    desc: "일상 속 외래어",
+    words: [
+      {reading:"コーヒー", meaning:"커피"}, {reading:"テレビ", meaning:"텔레비전"},
+      {reading:"カメラ", meaning:"카메라"}, {reading:"パソコン", meaning:"컴퓨터"},
+      {reading:"アイスクリーム", meaning:"아이스크림"}, {reading:"サッカー", meaning:"축구"},
+      {reading:"バナナ", meaning:"바나나"}, {reading:"タクシー", meaning:"택시"},
+      {reading:"ホテル", meaning:"호텔"}, {reading:"レストラン", meaning:"레스토랑"},
+      {reading:"ノート", meaning:"노트"}, {reading:"ペン", meaning:"펜"},
+      {reading:"バス", meaning:"버스"}, {reading:"ケーキ", meaning:"케이크"},
+      {reading:"ピアノ", meaning:"피아노"}, {reading:"ギター", meaning:"기타"},
+      {reading:"インターネット", meaning:"인터넷"}, {reading:"スマートフォン", meaning:"스마트폰"}
+    ]
+  },
+  kanji: {
+    name: "한자 읽기 연습", glyph: "読", tag: "KANJI READING",
+    desc: "한자를 보고 요미가나 조립", showKanji:true,
+    words: [
+      {kanji:"学校", reading:"がっこう", meaning:"학교"}, {kanji:"先生", reading:"せんせい", meaning:"선생님"},
+      {kanji:"天気", reading:"てんき", meaning:"날씨"}, {kanji:"時間", reading:"じかん", meaning:"시간"},
+      {kanji:"友達", reading:"ともだち", meaning:"친구"}, {kanji:"勉強", reading:"べんきょう", meaning:"공부"},
+      {kanji:"図書館", reading:"としょかん", meaning:"도서관"}, {kanji:"食堂", reading:"しょくどう", meaning:"식당"},
+      {kanji:"病院", reading:"びょういん", meaning:"병원"}, {kanji:"駅", reading:"えき", meaning:"역"},
+      {kanji:"会社", reading:"かいしゃ", meaning:"회사"}, {kanji:"仕事", reading:"しごと", meaning:"일 / 직업"},
+      {kanji:"新聞", reading:"しんぶん", meaning:"신문"}, {kanji:"電話", reading:"でんわ", meaning:"전화"},
+      {kanji:"写真", reading:"しゃしん", meaning:"사진"}, {kanji:"音楽", reading:"おんがく", meaning:"음악"},
+      {kanji:"映画", reading:"えいが", meaning:"영화"}, {kanji:"料理", reading:"りょうり", meaning:"요리"}
+    ]
+  },
+  n5: {
+    name: "JLPT N5 어휘", glyph: "五", tag: "JLPT N5",
+    desc: "기초 동사·형용사", showKanji:true,
+    words: [
+      {kanji:"毎日", reading:"まいにち", meaning:"매일"}, {kanji:"朝ご飯", reading:"あさごはん", meaning:"아침밥"},
+      {kanji:"出かける", reading:"でかける", meaning:"외출하다"}, {kanji:"買う", reading:"かう", meaning:"사다"},
+      {kanji:"飲む", reading:"のむ", meaning:"마시다"}, {kanji:"食べる", reading:"たべる", meaning:"먹다"},
+      {kanji:"行く", reading:"いく", meaning:"가다"}, {kanji:"来る", reading:"くる", meaning:"오다"},
+      {kanji:"見る", reading:"みる", meaning:"보다"}, {kanji:"聞く", reading:"きく", meaning:"듣다"},
+      {kanji:"話す", reading:"はなす", meaning:"말하다"}, {kanji:"読む", reading:"よむ", meaning:"읽다"},
+      {kanji:"書く", reading:"かく", meaning:"쓰다"}, {kanji:"高い", reading:"たかい", meaning:"비싸다 / 높다"},
+      {kanji:"安い", reading:"やすい", meaning:"싸다"}, {kanji:"大きい", reading:"おおきい", meaning:"크다"},
+      {kanji:"小さい", reading:"ちいさい", meaning:"작다"}, {kanji:"新しい", reading:"あたらしい", meaning:"새롭다"}
+    ]
+  },
+  n4: {
+    name: "JLPT N4 어휘", glyph: "四", tag: "JLPT N4",
+    desc: "추상 명사 중심 심화 어휘", showKanji:true,
+    words: [
+      {kanji:"経験", reading:"けいけん", meaning:"경험"}, {kanji:"準備", reading:"じゅんび", meaning:"준비"},
+      {kanji:"説明", reading:"せつめい", meaning:"설명"}, {kanji:"経済", reading:"けいざい", meaning:"경제"},
+      {kanji:"社会", reading:"しゃかい", meaning:"사회"}, {kanji:"文化", reading:"ぶんか", meaning:"문화"},
+      {kanji:"歴史", reading:"れきし", meaning:"역사"}, {kanji:"理由", reading:"りゆう", meaning:"이유"},
+      {kanji:"性格", reading:"せいかく", meaning:"성격"}, {kanji:"習慣", reading:"しゅうかん", meaning:"습관"},
+      {kanji:"必要", reading:"ひつよう", meaning:"필요"}, {kanji:"可能", reading:"かのう", meaning:"가능"},
+      {kanji:"自由", reading:"じゆう", meaning:"자유"}, {kanji:"安全", reading:"あんぜん", meaning:"안전"},
+      {kanji:"危険", reading:"きけん", meaning:"위험"}, {kanji:"複雑", reading:"ふくざつ", meaning:"복잡"},
+      {kanji:"簡単", reading:"かんたん", meaning:"간단"}, {kanji:"影響", reading:"えいきょう", meaning:"영향"}
+    ]
+  }
+};
+
+/* ---------- State ---------- */
+let selectedLevels = new Set(["hiragana"]);
+let lessonCount = 18;
+let freeMode = false;
+
+let queue = [];          // words for this run
+let qIndex = 0;
+let current = null;
+let tiles = [];           // {char, used}
+let answer = [];          // chars chosen in order
+let score = 0;
+let missed = [];          // words answered wrong at least once
+let sessionLeaderboard = [];
+let sessionHistory = [];
+
+let timerSeconds = 0;
+let timerId = null;
+let countUp = 0;
+let hintUses = 3;
+let paused = false;
+let currentWasMissed = false;
+
+/* ---------- Pronunciation (Web Speech API) ---------- */
+let jaVoice = null;
+function loadJaVoice(){
+  const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+  jaVoice = voices.find(v => v.lang === 'ja-JP') || voices.find(v => v.lang && v.lang.startsWith('ja')) || null;
+}
+if(window.speechSynthesis){
+  loadJaVoice();
+  window.speechSynthesis.onvoiceschanged = loadJaVoice;
+}
+function speakWord(text){
+  if(!window.speechSynthesis || !text) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'ja-JP';
+  if(jaVoice) utter.voice = jaVoice;
+  utter.rate = 0.9;
+  const btn = document.getElementById('speakBtn');
+  utter.onstart = () => btn && btn.classList.add('speaking');
+  utter.onend = () => btn && btn.classList.remove('speaking');
+  utter.onerror = () => btn && btn.classList.remove('speaking');
+  window.speechSynthesis.speak(utter);
+}
+function speakCurrent(){
+  if(current) speakWord(current.reading);
+}
+
+/* ---------- Mora splitter ---------- */
+function splitMora(str){
+  const small = "ゃゅょぁぃぅぇぉャュョァィゥェォ";
+  const out = [];
+  for(const ch of Array.from(str)){
+    if(small.includes(ch) && out.length){
+      out[out.length-1] += ch;
+    } else {
+      out.push(ch);
+    }
+  }
+  return out;
+}
+
+/* ---------- Init level cards ---------- */
+function renderLevelList(){
+  const wrap = document.getElementById('levelList');
+  wrap.innerHTML = "";
+  Object.entries(LEVELS).forEach(([key, lv])=>{
+    const card = document.createElement('div');
+    card.className = 'level-card' + (selectedLevels.has(key) ? ' selected' : '');
+    card.onclick = () => {
+      if(selectedLevels.has(key)){
+        if(selectedLevels.size > 1) selectedLevels.delete(key);
+      } else selectedLevels.add(key);
+      renderLevelList(); updateCountLabel();
+    };
+    card.innerHTML = `
+      <div class="level-glyph">${lv.glyph}</div>
+      <div class="level-body">
+        <div class="level-name">${lv.name}</div>
+        <div class="level-meta">${lv.desc} · ${lv.words.length}개</div>
+      </div>
+      <div class="level-check"></div>`;
+    wrap.appendChild(card);
+  });
+  updateCountLabel();
+}
+function updateCountLabel(){
+  const total = [...selectedLevels].reduce((s,k)=>s+LEVELS[k].words.length,0);
+  document.getElementById('lessonCountLabel').textContent = `레슨 단어: ${total}개`;
+  document.getElementById('startBtn').disabled = total === 0;
+}
+function changeCount(d){
+  lessonCount = Math.max(4, Math.min(40, lessonCount + d));
+  document.getElementById('countDisplay').textContent = lessonCount;
+}
+function toggleFree(){
+  freeMode = !freeMode;
+  document.getElementById('freeToggle').classList.toggle('on', freeMode);
+}
+
+/* ---------- Game flow ---------- */
+function buildQueue(){
+  let pool = [];
+  selectedLevels.forEach(k=>{
+    LEVELS[k].words.forEach(w=> pool.push({...w, level:k, tag:LEVELS[k].tag, showKanji:!!LEVELS[k].showKanji}));
+  });
+  for(let i=pool.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [pool[i],pool[j]] = [pool[j],pool[i]];
+  }
+  return pool.slice(0, Math.min(lessonCount, pool.length));
+}
+
+function startGame(){
+  queue = buildQueue();
+  if(queue.length === 0) return;
+  qIndex = 0; score = 0; missed = [];
+  countUp = 0; timerSeconds = 0;
+  clearInterval(timerId);
+  timerId = setInterval(tick, 1000);
+  switchScreen('game');
+  loadWord();
+}
+
+function tick(){
+  if(paused) return;
+  countUp++;
+  document.getElementById('timerLabel').textContent = "⏱ " + fmtTime(countUp);
+}
+function fmtTime(s){
+  const m = Math.floor(s/60), sec = s%60;
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+
+function loadWord(){
+  if(qIndex >= queue.length){ finishGame(); return; }
+  current = queue[qIndex];
+  currentWasMissed = false;
+  answer = [];
+  hintUses = Math.min(hintUses, 3);
+  document.getElementById('progLabel').textContent = `${qIndex+1} / ${queue.length}`;
+  document.getElementById('progFill').style.width = `${(qIndex/queue.length)*100}%`;
+  document.getElementById('scoreLabel').textContent = `${score} pts`;
+  document.getElementById('promptTag').textContent = current.tag;
+
+  const main = document.getElementById('promptMain');
+  if(current.showKanji){
+    main.innerHTML = `<div class="prompt-kanji">${current.kanji}</div><div class="prompt-meaning">${current.meaning}</div>`;
+  } else {
+    main.innerHTML = `<div class="prompt-meaning only">${current.meaning}</div>`;
+  }
+
+  const mora = splitMora(current.reading);
+  tiles = mora.map((c,i)=>({char:c, used:false, id:i}));
+  let shuffled = [...tiles];
+  do {
+    for(let i=shuffled.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [shuffled[i],shuffled[j]] = [shuffled[j],shuffled[i]];
+    }
+  } while(mora.length > 1 && shuffled.every((t,i)=>t.char===mora[i]));
+  tiles = shuffled;
+
+  renderAnswerSlot(mora.length);
+  renderTileTray();
+  resetHintBtn();
+}
+
+function renderAnswerSlot(len){
+  const slot = document.getElementById('answerSlot');
+  slot.innerHTML = "";
+  for(let i=0;i<len;i++){
+    const d = document.createElement('div');
+    d.className = 'a-block' + (answer[i] ? '' : ' empty');
+    d.textContent = answer[i] ? answer[i] : '';
+    slot.appendChild(d);
+  }
+}
+
+function renderTileTray(){
+  const tray = document.getElementById('tileTray');
+  tray.innerHTML = "";
+  tiles.forEach(t=>{
+    const d = document.createElement('div');
+    d.className = 'k-tile' + (t.used ? ' used' : '');
+    d.textContent = t.char;
+    d.onclick = () => pickTile(t.id);
+    tray.appendChild(d);
+  });
+}
+
+function pickTile(id){
+  if(paused) return;
+  const t = tiles.find(x=>x.id===id);
+  if(!t || t.used) return;
+  t.used = true;
+  answer.push(t.char);
+  renderTileTray();
+  renderAnswerSlot(splitMora(current.reading).length);
+
+  const target = splitMora(current.reading);
+  if(answer.length === target.length){
+    if(answer.join('') === target.join('')){
+      handleCorrect();
+    } else {
+      handleWrong();
+    }
+  }
+}
+
+function clearAnswer(){
+  if(paused) return;
+  tiles.forEach(t=>t.used=false);
+  answer = [];
+  renderTileTray();
+  renderAnswerSlot(splitMora(current.reading).length);
+}
+
+function useHint(){
+  if(paused || hintUses<=0) return;
+  const target = splitMora(current.reading);
+  const nextIdx = answer.length;
+  if(nextIdx >= target.length) return;
+  const need = target[nextIdx];
+  const t = tiles.find(x=>!x.used && x.char===need);
+  if(t){
+    hintUses--;
+    resetHintBtn();
+    pickTile(t.id);
+  }
+}
+function resetHintBtn(){
+  const btn = document.getElementById('hintBtn');
+  btn.textContent = `🔩 글자 공개 ${hintUses}회 남음`;
+  btn.disabled = hintUses<=0;
+}
+
+function handleCorrect(){
+  const bonus = currentWasMissed ? 5 : 10;
+  score += bonus;
+  flashFeedback(true, `+${bonus}`);
+  document.getElementById('scoreLabel').textContent = `${score} pts`;
+  speakWord(current.reading);
+  setTimeout(()=>{ qIndex++; loadWord(); }, 480);
+}
+function handleWrong(){
+  if(!currentWasMissed){ missed.push(current); currentWasMissed = true; }
+  flashFeedback(false, "다시!");
+  document.querySelector('.prompt-card').classList.add('shake');
+  setTimeout(()=>{
+    document.querySelector('.prompt-card').classList.remove('shake');
+    tiles.forEach(t=>t.used=false);
+    answer = [];
+    renderTileTray();
+    renderAnswerSlot(splitMora(current.reading).length);
+  }, 420);
+}
+function flashFeedback(ok, label){
+  const el = document.getElementById('feedbackFlash');
+  el.className = 'feedback-flash' + (ok?'':' miss');
+  el.innerHTML = `<span class="stamp">${ok?'印':'✕'}</span><span>${label}</span>`;
+  void el.offsetWidth;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 550);
+}
+
+function finishGame(){
+  clearInterval(timerId);
+  const total = queue.length;
+  const correctFirstTry = total - missed.length;
+  const acc = total ? Math.round((correctFirstTry/total)*100) : 100;
+  document.getElementById('completeSub').textContent = `${total} / ${total}개 단어 완성`;
+  document.getElementById('statScore').textContent = score;
+  document.getElementById('statTime').textContent = fmtTime(countUp);
+  document.getElementById('statAcc').textContent = acc + '%';
+
+  const rl = document.getElementById('reviewList');
+  rl.innerHTML = "";
+  document.getElementById('reviewWrap').style.display = missed.length ? 'block' : 'none';
+  missed.forEach(w=>{
+    const li = document.createElement('li');
+    li.className = 'review-item';
+    li.innerHTML = `<span class="rk">${w.showKanji ? (w.kanji+' · '+w.reading) : w.reading}</span><span class="rm">${w.meaning}</span>`;
+    rl.appendChild(li);
+  });
+
+  sessionHistory.unshift({date:new Date(), score, time:countUp, total, acc, levels:[...selectedLevels]});
+  switchScreen('complete');
+}
+
+function retryMissed(){
+  if(missed.length === 0){ startGame(); return; }
+  queue = [...missed];
+  missed = []; qIndex = 0; score = 0; countUp = 0;
+  clearInterval(timerId); timerId = setInterval(tick,1000);
+  switchScreen('game'); loadWord();
+}
+function restartLesson(){
+  togglePause();
+  startGame();
+}
+
+/* ---------- Pause ---------- */
+function togglePause(){
+  paused = !paused;
+  document.getElementById('pauseOverlay').classList.toggle('show', paused);
+}
+
+/* ---------- Screens / nav ---------- */
+function switchScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+}
+function goHome(){
+  clearInterval(timerId);
+  paused = false;
+  document.getElementById('pauseOverlay').classList.remove('show');
+  renderLevelList();
+  switchScreen('home');
+}
+
+/* ---------- Modals ---------- */
+function openModal(name){
+  if(name==='leaderboard') renderLeaderboard();
+  if(name==='history') renderHistory();
+  document.getElementById('modal-'+name).classList.add('show');
+}
+function closeModal(name){
+  document.getElementById('modal-'+name).classList.remove('show');
+}
+function renderHistory(){
+  const wrap = document.getElementById('historyBody');
+  if(sessionHistory.length===0){
+    wrap.innerHTML = `<p class="empty-note">아직 완료한 연습이 없습니다.</p>`;
+    return;
+  }
+  wrap.innerHTML = sessionHistory.map(h=>`
+    <div class="lb-row">
+      <span class="lb-name">${h.levels.map(k=>LEVELS[k].name).join(' · ')}</span>
+      <span class="lb-score">${h.score}pt · ${fmtTime(h.time)}</span>
+    </div>`).join('');
+}
+function renderLeaderboard(){
+  const wrap = document.getElementById('leaderboardBody');
+  if(sessionLeaderboard.length===0){
+    wrap.innerHTML = `<p class="empty-note">아직 등록된 기록이 없습니다.<br>연습을 완료하고 순위에 등록해보세요.</p>`;
+    return;
+  }
+  const sorted = [...sessionLeaderboard].sort((a,b)=>b.score-a.score).slice(0,20);
+  wrap.innerHTML = sorted.map((r,i)=>`
+    <div class="lb-row">
+      <span class="lb-rank">${i+1}</span>
+      <span class="lb-name">${r.name}</span>
+      <span class="lb-score">${r.score}pt</span>
+    </div>`).join('');
+}
+
+/* ---------- Score submit / share ---------- */
+async function submitScore(){
+  const name = document.getElementById('nameInput').value.trim() || '이름없음';
+  const entry = {name, score, time:countUp, date:new Date().toISOString()};
+  sessionLeaderboard.push(entry);
+
+  if(SCRIPT_URL){
+    try{
+      await fetch(SCRIPT_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(entry)
+      });
+    }catch(e){ console.warn('leaderboard sync failed', e); }
+  }
+  openModal('leaderboard');
+}
+function shareScore(){
+  const text = `活字所 카나 포지 — ${score}pt (${fmtTime(countUp)})\n${[...selectedLevels].map(k=>LEVELS[k].name).join(', ')}`;
+  if(navigator.share){
+    navigator.share({text}).catch(()=>{});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(text);
+    alert('점수가 클립보드에 복사되었습니다.');
+  }
+}
+
+/* ---------- Boot ---------- */
+renderLevelList();
+document.getElementById('countDisplay').textContent = lessonCount;
+</script>
+</body>
+</html>
