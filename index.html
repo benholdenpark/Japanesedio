@@ -114,6 +114,25 @@
     content:"✓"; color:#fff; font-size:12px; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
   }
 
+  .level-group{margin-bottom:10px;}
+  .level-group-header{margin-bottom:0; border-radius:10px;}
+  .level-group-header.expanded{border-radius:10px 10px 0 0;}
+  .chevron{
+    font-size:12px; color:var(--sumi-soft); margin-left:2px; transition: transform .18s ease; flex:0 0 auto;
+  }
+  .level-group-header.expanded .chevron{transform:rotate(180deg); color:var(--ai);}
+  .group-check{cursor:pointer;}
+  .sub-list{
+    display:flex; flex-direction:column; gap:7px;
+    background:#EFE7D3; border:1px solid var(--paper-line); border-top:none;
+    border-radius:0 0 10px 10px; padding:9px 9px 10px;
+    animation: fadeIn .18s ease;
+  }
+  .sub-card{padding:10px 12px; gap:11px;}
+  .level-glyph.small{width:34px; height:34px; font-size:15px; border-radius:7px;}
+  .sub-card .level-name{font-size:13.5px;}
+  .sub-card .level-meta{font-size:11px;}
+
   /* count stepper */
   .panel{
     background:#F7F2E7; border:1px solid var(--paper-line); border-radius:12px;
@@ -451,19 +470,108 @@ const SCRIPT_URL = ""; // 예: "https://script.google.com/macros/s/XXXX/exec"
 
 /* ---------- Word data ---------- */
 const LEVELS = {
-  hiragana: {
-    name: "히라가나 기초", glyph: "あ", tag: "HIRAGANA",
-    desc: "받침 없는 기초 명사",
+  hiragana1: {
+    name: "히라가나 1단계", glyph: "一", tag: "HIRAGANA 1",
+    desc: "탁음·요음 없는 기초 명사",
     words: [
-      {reading:"あさ", meaning:"아침"}, {reading:"ひる", meaning:"낮 / 점심"},
+      {reading:"あさ", meaning:"아침"}, {reading:"ひる", meaning:"낮"},
       {reading:"よる", meaning:"밤"}, {reading:"みず", meaning:"물"},
       {reading:"やま", meaning:"산"}, {reading:"かわ", meaning:"강"},
       {reading:"そら", meaning:"하늘"}, {reading:"はな", meaning:"꽃"},
       {reading:"とり", meaning:"새"}, {reading:"いぬ", meaning:"개"},
-      {reading:"ねこ", meaning:"고양이"}, {reading:"さかな", meaning:"물고기"},
-      {reading:"くるま", meaning:"자동차"}, {reading:"たまご", meaning:"계란"},
-      {reading:"りんご", meaning:"사과"}, {reading:"さくら", meaning:"벚꽃"},
-      {reading:"ともだち", meaning:"친구"}, {reading:"ありがとう", meaning:"고맙습니다"}
+      {reading:"ねこ", meaning:"고양이"}, {reading:"くも", meaning:"구름"},
+      {reading:"ゆき", meaning:"눈(날씨)"}, {reading:"あめ", meaning:"비"},
+      {reading:"かぜ", meaning:"바람"}, {reading:"ほし", meaning:"별"},
+      {reading:"つき", meaning:"달"}, {reading:"いえ", meaning:"집"},
+      {reading:"にわ", meaning:"정원"}, {reading:"まち", meaning:"마을"},
+      {reading:"みせ", meaning:"가게"}, {reading:"くつ", meaning:"신발"},
+      {reading:"かさ", meaning:"우산"}, {reading:"いす", meaning:"의자"},
+      {reading:"つくえ", meaning:"책상"}, {reading:"まど", meaning:"창문"},
+      {reading:"ほん", meaning:"책"}, {reading:"て", meaning:"손"},
+      {reading:"め", meaning:"눈(신체)"}, {reading:"みみ", meaning:"귀"},
+      {reading:"くち", meaning:"입"}, {reading:"あたま", meaning:"머리"},
+      {reading:"かお", meaning:"얼굴"}, {reading:"あし", meaning:"다리 / 발"},
+      {reading:"くび", meaning:"목"}, {reading:"ゆび", meaning:"손가락"},
+      {reading:"みぎ", meaning:"오른쪽"}, {reading:"ひだり", meaning:"왼쪽"},
+      {reading:"うえ", meaning:"위"}, {reading:"した", meaning:"아래"}
+    ]
+  },
+  hiragana2: {
+    name: "히라가나 2단계", glyph: "二", tag: "HIRAGANA 2",
+    desc: "탁음·반탁음(゛゜) 포함 단어",
+    words: [
+      {reading:"かぞく", meaning:"가족"}, {reading:"かばん", meaning:"가방"},
+      {reading:"とけい", meaning:"시계"}, {reading:"えんぴつ", meaning:"연필"},
+      {reading:"たまご", meaning:"계란"}, {reading:"さかな", meaning:"물고기"},
+      {reading:"くるま", meaning:"자동차"}, {reading:"たまねぎ", meaning:"양파"},
+      {reading:"にんじん", meaning:"당근"}, {reading:"やさい", meaning:"채소"},
+      {reading:"くだもの", meaning:"과일"}, {reading:"ごはん", meaning:"밥"},
+      {reading:"おちゃ", meaning:"차(음료)"}, {reading:"おかし", meaning:"과자"},
+      {reading:"がっこう", meaning:"학교"}, {reading:"べんきょう", meaning:"공부"},
+      {reading:"でんわ", meaning:"전화"}, {reading:"げんき", meaning:"건강함 / 활기참"},
+      {reading:"たんじょうび", meaning:"생일"}, {reading:"しんぶん", meaning:"신문"},
+      {reading:"おんがく", meaning:"음악"}, {reading:"えいが", meaning:"영화"},
+      {reading:"びょういん", meaning:"병원"}, {reading:"ぎんこう", meaning:"은행"},
+      {reading:"どうぶつ", meaning:"동물"}, {reading:"たべもの", meaning:"음식"},
+      {reading:"のみもの", meaning:"음료"}, {reading:"ふでばこ", meaning:"필통"},
+      {reading:"けしごむ", meaning:"지우개"}, {reading:"がっき", meaning:"악기"},
+      {reading:"かびん", meaning:"꽃병"}, {reading:"ぼうし", meaning:"모자"},
+      {reading:"でんしゃ", meaning:"전철"}, {reading:"じてんしゃ", meaning:"자전거"},
+      {reading:"ゆうびんきょく", meaning:"우체국"}, {reading:"ざっし", meaning:"잡지"},
+      {reading:"でぐち", meaning:"출구"}, {reading:"いりぐち", meaning:"입구"},
+      {reading:"ばしょ", meaning:"장소"}, {reading:"じかん", meaning:"시간"}
+    ]
+  },
+  hiragana3: {
+    name: "히라가나 3단계", glyph: "三", tag: "HIRAGANA 3",
+    desc: "요음(ゃゅょ)·촉음(っ) 포함 단어",
+    words: [
+      {reading:"きょう", meaning:"오늘"}, {reading:"きのう", meaning:"어제"},
+      {reading:"あした", meaning:"내일"}, {reading:"しゅくだい", meaning:"숙제"},
+      {reading:"じゅぎょう", meaning:"수업"}, {reading:"きゃく", meaning:"손님"},
+      {reading:"りょこう", meaning:"여행"}, {reading:"りょうり", meaning:"요리"},
+      {reading:"しゃしん", meaning:"사진"}, {reading:"じゃがいも", meaning:"감자"},
+      {reading:"ぎゅうにゅう", meaning:"우유"}, {reading:"きゅうり", meaning:"오이"},
+      {reading:"しょうがっこう", meaning:"초등학교"}, {reading:"ちゅうがっこう", meaning:"중학교"},
+      {reading:"びょうき", meaning:"아픔 / 병"}, {reading:"しゃちょう", meaning:"사장(님)"},
+      {reading:"きょうしつ", meaning:"교실"}, {reading:"じゅうしょ", meaning:"주소"},
+      {reading:"りょかん", meaning:"여관"}, {reading:"ひゃく", meaning:"백(100)"},
+      {reading:"さんびゃく", meaning:"삼백(300)"}, {reading:"きって", meaning:"우표"},
+      {reading:"きっぷ", meaning:"표 / 승차권"}, {reading:"かっこ", meaning:"괄호"},
+      {reading:"けっこん", meaning:"결혼"}, {reading:"せっけん", meaning:"비누"},
+      {reading:"らっぱ", meaning:"나팔"}, {reading:"ゆっくり", meaning:"천천히"},
+      {reading:"まっすぐ", meaning:"곧장"}, {reading:"やっぱり", meaning:"역시"},
+      {reading:"ちょっと", meaning:"조금 / 잠깐"}, {reading:"にっき", meaning:"일기"},
+      {reading:"はっぴょう", meaning:"발표"}, {reading:"しゅみ", meaning:"취미"},
+      {reading:"じゅんび", meaning:"준비"}, {reading:"しゅっぱつ", meaning:"출발"},
+      {reading:"きゅうけい", meaning:"휴식"}, {reading:"きゅうじつ", meaning:"휴일"},
+      {reading:"しょうゆ", meaning:"간장"}, {reading:"ちゃわん", meaning:"밥그릇"}
+    ]
+  },
+  hiragana4: {
+    name: "히라가나 4단계", glyph: "四", tag: "HIRAGANA 4",
+    desc: "인사말·감정 표현 등 생활 어휘",
+    words: [
+      {reading:"おはよう", meaning:"안녕(아침 인사)"}, {reading:"こんにちは", meaning:"안녕하세요(낮 인사)"},
+      {reading:"こんばんは", meaning:"안녕하세요(저녁 인사)"}, {reading:"さようなら", meaning:"안녕히 가세요"},
+      {reading:"すみません", meaning:"죄송합니다 / 실례합니다"}, {reading:"ありがとう", meaning:"고맙습니다"},
+      {reading:"いただきます", meaning:"잘 먹겠습니다"}, {reading:"ごちそうさま", meaning:"잘 먹었습니다"},
+      {reading:"おやすみ", meaning:"안녕히 주무세요"}, {reading:"いってきます", meaning:"다녀오겠습니다"},
+      {reading:"いってらっしゃい", meaning:"다녀오세요"}, {reading:"ただいま", meaning:"다녀왔습니다"},
+      {reading:"おかえり", meaning:"어서 와(귀가 인사)"}, {reading:"おめでとう", meaning:"축하합니다"},
+      {reading:"だいじょうぶ", meaning:"괜찮습니다"}, {reading:"おねがいします", meaning:"부탁합니다"},
+      {reading:"しつれいします", meaning:"실례합니다"}, {reading:"おつかれさま", meaning:"수고하셨습니다"},
+      {reading:"がんばって", meaning:"힘내"}, {reading:"きをつけて", meaning:"조심해"},
+      {reading:"たのしかった", meaning:"즐거웠다"}, {reading:"うれしい", meaning:"기쁘다"},
+      {reading:"かなしい", meaning:"슬프다"}, {reading:"さびしい", meaning:"외롭다"},
+      {reading:"こわい", meaning:"무섭다"}, {reading:"うつくしい", meaning:"아름답다"},
+      {reading:"やさしい", meaning:"상냥하다 / 다정하다"}, {reading:"おいしい", meaning:"맛있다"},
+      {reading:"まずい", meaning:"맛없다"}, {reading:"あぶない", meaning:"위험하다"},
+      {reading:"すばらしい", meaning:"훌륭하다"}, {reading:"ふしぎ", meaning:"신기하다 / 이상하다"},
+      {reading:"しあわせ", meaning:"행복"}, {reading:"ゆめ", meaning:"꿈"},
+      {reading:"きぼう", meaning:"희망"}, {reading:"おもいで", meaning:"추억"},
+      {reading:"えがお", meaning:"웃는 얼굴"}, {reading:"なみだ", meaning:"눈물"},
+      {reading:"きもち", meaning:"기분 / 마음"}, {reading:"こころ", meaning:"마음"}
     ]
   },
   katakana: {
@@ -478,7 +586,18 @@ const LEVELS = {
       {reading:"ノート", meaning:"노트"}, {reading:"ペン", meaning:"펜"},
       {reading:"バス", meaning:"버스"}, {reading:"ケーキ", meaning:"케이크"},
       {reading:"ピアノ", meaning:"피아노"}, {reading:"ギター", meaning:"기타"},
-      {reading:"インターネット", meaning:"인터넷"}, {reading:"スマートフォン", meaning:"스마트폰"}
+      {reading:"インターネット", meaning:"인터넷"}, {reading:"スマートフォン", meaning:"스마트폰"},
+      {reading:"パン", meaning:"빵"}, {reading:"ジュース", meaning:"주스"},
+      {reading:"ミルク", meaning:"우유"}, {reading:"サラダ", meaning:"샐러드"},
+      {reading:"ハンバーガー", meaning:"햄버거"}, {reading:"ピザ", meaning:"피자"},
+      {reading:"チーズ", meaning:"치즈"}, {reading:"チョコレート", meaning:"초콜릿"},
+      {reading:"アルバイト", meaning:"아르바이트"}, {reading:"デパート", meaning:"백화점"},
+      {reading:"スーパー", meaning:"슈퍼마켓"}, {reading:"エレベーター", meaning:"엘리베이터"},
+      {reading:"トイレ", meaning:"화장실"}, {reading:"シャワー", meaning:"샤워"},
+      {reading:"ソファ", meaning:"소파"}, {reading:"テーブル", meaning:"테이블"},
+      {reading:"ドア", meaning:"문"}, {reading:"カード", meaning:"카드"},
+      {reading:"チケット", meaning:"티켓"}, {reading:"プレゼント", meaning:"선물"},
+      {reading:"イベント", meaning:"이벤트"}, {reading:"メール", meaning:"메일"}
     ]
   },
   kanji: {
@@ -493,7 +612,18 @@ const LEVELS = {
       {kanji:"会社", reading:"かいしゃ", meaning:"회사"}, {kanji:"仕事", reading:"しごと", meaning:"일 / 직업"},
       {kanji:"新聞", reading:"しんぶん", meaning:"신문"}, {kanji:"電話", reading:"でんわ", meaning:"전화"},
       {kanji:"写真", reading:"しゃしん", meaning:"사진"}, {kanji:"音楽", reading:"おんがく", meaning:"음악"},
-      {kanji:"映画", reading:"えいが", meaning:"영화"}, {kanji:"料理", reading:"りょうり", meaning:"요리"}
+      {kanji:"映画", reading:"えいが", meaning:"영화"}, {kanji:"料理", reading:"りょうり", meaning:"요리"},
+      {kanji:"公園", reading:"こうえん", meaning:"공원"}, {kanji:"教室", reading:"きょうしつ", meaning:"교실"},
+      {kanji:"宿題", reading:"しゅくだい", meaning:"숙제"}, {kanji:"試験", reading:"しけん", meaning:"시험"},
+      {kanji:"授業", reading:"じゅぎょう", meaning:"수업"}, {kanji:"夏休み", reading:"なつやすみ", meaning:"여름방학"},
+      {kanji:"誕生日", reading:"たんじょうび", meaning:"생일"}, {kanji:"家族", reading:"かぞく", meaning:"가족"},
+      {kanji:"兄弟", reading:"きょうだい", meaning:"형제"}, {kanji:"両親", reading:"りょうしん", meaning:"부모"},
+      {kanji:"近所", reading:"きんじょ", meaning:"근처 / 이웃"}, {kanji:"郵便局", reading:"ゆうびんきょく", meaning:"우체국"},
+      {kanji:"銀行", reading:"ぎんこう", meaning:"은행"}, {kanji:"動物園", reading:"どうぶつえん", meaning:"동물원"},
+      {kanji:"体育館", reading:"たいいくかん", meaning:"체육관"}, {kanji:"昼休み", reading:"ひるやすみ", meaning:"점심시간"},
+      {kanji:"予定", reading:"よてい", meaning:"예정 / 계획"}, {kanji:"週末", reading:"しゅうまつ", meaning:"주말"},
+      {kanji:"今週", reading:"こんしゅう", meaning:"이번 주"}, {kanji:"来週", reading:"らいしゅう", meaning:"다음 주"},
+      {kanji:"先週", reading:"せんしゅう", meaning:"지난 주"}, {kanji:"質問", reading:"しつもん", meaning:"질문"}
     ]
   },
   n5: {
@@ -508,7 +638,18 @@ const LEVELS = {
       {kanji:"話す", reading:"はなす", meaning:"말하다"}, {kanji:"読む", reading:"よむ", meaning:"읽다"},
       {kanji:"書く", reading:"かく", meaning:"쓰다"}, {kanji:"高い", reading:"たかい", meaning:"비싸다 / 높다"},
       {kanji:"安い", reading:"やすい", meaning:"싸다"}, {kanji:"大きい", reading:"おおきい", meaning:"크다"},
-      {kanji:"小さい", reading:"ちいさい", meaning:"작다"}, {kanji:"新しい", reading:"あたらしい", meaning:"새롭다"}
+      {kanji:"小さい", reading:"ちいさい", meaning:"작다"}, {kanji:"新しい", reading:"あたらしい", meaning:"새롭다"},
+      {kanji:"古い", reading:"ふるい", meaning:"낡다 / 오래되다"}, {kanji:"暑い", reading:"あつい", meaning:"덥다"},
+      {kanji:"寒い", reading:"さむい", meaning:"춥다"}, {kanji:"忙しい", reading:"いそがしい", meaning:"바쁘다"},
+      {kanji:"楽しい", reading:"たのしい", meaning:"즐겁다"}, {kanji:"難しい", reading:"むずかしい", meaning:"어렵다"},
+      {kanji:"易しい", reading:"やさしい", meaning:"쉽다"}, {kanji:"起きる", reading:"おきる", meaning:"일어나다"},
+      {kanji:"寝る", reading:"ねる", meaning:"자다"}, {kanji:"働く", reading:"はたらく", meaning:"일하다"},
+      {kanji:"休む", reading:"やすむ", meaning:"쉬다"}, {kanji:"分かる", reading:"わかる", meaning:"이해하다 / 알다"},
+      {kanji:"知る", reading:"しる", meaning:"알다"}, {kanji:"待つ", reading:"まつ", meaning:"기다리다"},
+      {kanji:"乗る", reading:"のる", meaning:"타다"}, {kanji:"降りる", reading:"おりる", meaning:"내리다"},
+      {kanji:"開ける", reading:"あける", meaning:"열다"}, {kanji:"閉める", reading:"しめる", meaning:"닫다"},
+      {kanji:"使う", reading:"つかう", meaning:"사용하다"}, {kanji:"作る", reading:"つくる", meaning:"만들다"},
+      {kanji:"教える", reading:"おしえる", meaning:"가르치다"}, {kanji:"習う", reading:"ならう", meaning:"배우다"}
     ]
   },
   n4: {
@@ -523,13 +664,24 @@ const LEVELS = {
       {kanji:"必要", reading:"ひつよう", meaning:"필요"}, {kanji:"可能", reading:"かのう", meaning:"가능"},
       {kanji:"自由", reading:"じゆう", meaning:"자유"}, {kanji:"安全", reading:"あんぜん", meaning:"안전"},
       {kanji:"危険", reading:"きけん", meaning:"위험"}, {kanji:"複雑", reading:"ふくざつ", meaning:"복잡"},
-      {kanji:"簡単", reading:"かんたん", meaning:"간단"}, {kanji:"影響", reading:"えいきょう", meaning:"영향"}
+      {kanji:"簡単", reading:"かんたん", meaning:"간단"}, {kanji:"影響", reading:"えいきょう", meaning:"영향"},
+      {kanji:"提出", reading:"ていしゅつ", meaning:"제출"}, {kanji:"連絡", reading:"れんらく", meaning:"연락"},
+      {kanji:"参加", reading:"さんか", meaning:"참가"}, {kanji:"利用", reading:"りよう", meaning:"이용"},
+      {kanji:"選択", reading:"せんたく", meaning:"선택"}, {kanji:"確認", reading:"かくにん", meaning:"확인"},
+      {kanji:"比較", reading:"ひかく", meaning:"비교"}, {kanji:"成長", reading:"せいちょう", meaning:"성장"},
+      {kanji:"努力", reading:"どりょく", meaning:"노력"}, {kanji:"達成", reading:"たっせい", meaning:"달성"},
+      {kanji:"興味", reading:"きょうみ", meaning:"흥미"}, {kanji:"態度", reading:"たいど", meaning:"태도"},
+      {kanji:"印象", reading:"いんしょう", meaning:"인상"}, {kanji:"判断", reading:"はんだん", meaning:"판단"},
+      {kanji:"解決", reading:"かいけつ", meaning:"해결"}, {kanji:"原因", reading:"げんいん", meaning:"원인"},
+      {kanji:"結果", reading:"けっか", meaning:"결과"}, {kanji:"方法", reading:"ほうほう", meaning:"방법"},
+      {kanji:"条件", reading:"じょうけん", meaning:"조건"}, {kanji:"状況", reading:"じょうきょう", meaning:"상황"},
+      {kanji:"関係", reading:"かんけい", meaning:"관계"}, {kanji:"環境", reading:"かんきょう", meaning:"환경"}
     ]
   }
 };
 
 /* ---------- State ---------- */
-let selectedLevels = new Set(["hiragana"]);
+let selectedLevels = new Set(["hiragana1"]);
 let lessonCount = 18;
 let freeMode = false;
 
@@ -591,17 +743,92 @@ function splitMora(str){
   return out;
 }
 
+/* ---------- Level grouping ---------- */
+const GROUPS = {
+  hiragana: {
+    name: "히라가나", glyph: "あ", desc: "단계별 문자 연습 (1~4단계)",
+    subs: ["hiragana1","hiragana2","hiragana3","hiragana4"]
+  }
+};
+const GROUPED_KEYS = new Set(Object.values(GROUPS).flatMap(g=>g.subs));
+let expandedGroups = new Set(["hiragana"]);
+
+function toggleGroupSelection(groupKey, ev){
+  ev.stopPropagation();
+  const g = GROUPS[groupKey];
+  const allSelected = g.subs.every(k => selectedLevels.has(k));
+  g.subs.forEach(k=>{
+    if(allSelected) selectedLevels.delete(k);
+    else selectedLevels.add(k);
+  });
+  renderLevelList(); updateCountLabel();
+}
+function toggleGroupExpand(groupKey){
+  if(expandedGroups.has(groupKey)) expandedGroups.delete(groupKey);
+  else expandedGroups.add(groupKey);
+  renderLevelList();
+}
+function toggleSubLevel(key, ev){
+  ev.stopPropagation();
+  if(selectedLevels.has(key)) selectedLevels.delete(key);
+  else selectedLevels.add(key);
+  renderLevelList(); updateCountLabel();
+}
+
 /* ---------- Init level cards ---------- */
 function renderLevelList(){
   const wrap = document.getElementById('levelList');
   wrap.innerHTML = "";
+
+  Object.entries(GROUPS).forEach(([groupKey, g])=>{
+    const selCount = g.subs.filter(k=>selectedLevels.has(k)).length;
+    const expanded = expandedGroups.has(groupKey);
+    const groupWrap = document.createElement('div');
+    groupWrap.className = 'level-group';
+
+    const header = document.createElement('div');
+    header.className = 'level-card level-group-header' + (selCount ? ' selected' : '') + (expanded ? ' expanded' : '');
+    header.onclick = () => toggleGroupExpand(groupKey);
+    header.innerHTML = `
+      <div class="level-glyph">${g.glyph}</div>
+      <div class="level-body">
+        <div class="level-name">${g.name}</div>
+        <div class="level-meta">${g.desc} · ${selCount}/${g.subs.length}단계 선택됨</div>
+      </div>
+      <div class="level-check group-check" title="전체 선택/해제"></div>
+      <div class="chevron">▾</div>`;
+    header.querySelector('.group-check').onclick = (ev)=> toggleGroupSelection(groupKey, ev);
+    groupWrap.appendChild(header);
+
+    if(expanded){
+      const subList = document.createElement('div');
+      subList.className = 'sub-list';
+      g.subs.forEach(key=>{
+        const lv = LEVELS[key];
+        const card = document.createElement('div');
+        card.className = 'level-card sub-card' + (selectedLevels.has(key) ? ' selected' : '');
+        card.onclick = (ev) => toggleSubLevel(key, ev);
+        card.innerHTML = `
+          <div class="level-glyph small">${lv.glyph}</div>
+          <div class="level-body">
+            <div class="level-name">${lv.name}</div>
+            <div class="level-meta">${lv.desc} · ${lv.words.length}개</div>
+          </div>
+          <div class="level-check"></div>`;
+        subList.appendChild(card);
+      });
+      groupWrap.appendChild(subList);
+    }
+    wrap.appendChild(groupWrap);
+  });
+
   Object.entries(LEVELS).forEach(([key, lv])=>{
+    if(GROUPED_KEYS.has(key)) return;
     const card = document.createElement('div');
     card.className = 'level-card' + (selectedLevels.has(key) ? ' selected' : '');
     card.onclick = () => {
-      if(selectedLevels.has(key)){
-        if(selectedLevels.size > 1) selectedLevels.delete(key);
-      } else selectedLevels.add(key);
+      if(selectedLevels.has(key)) selectedLevels.delete(key);
+      else selectedLevels.add(key);
       renderLevelList(); updateCountLabel();
     };
     card.innerHTML = `
@@ -621,7 +848,7 @@ function updateCountLabel(){
   document.getElementById('startBtn').disabled = total === 0;
 }
 function changeCount(d){
-  lessonCount = Math.max(4, Math.min(40, lessonCount + d));
+  lessonCount = Math.max(4, Math.min(80, lessonCount + d));
   document.getElementById('countDisplay').textContent = lessonCount;
 }
 function toggleFree(){
