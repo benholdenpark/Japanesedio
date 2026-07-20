@@ -233,7 +233,9 @@
     font-family:'Shippori Mincho', serif; font-size:19px; font-weight:700;
     box-shadow: var(--shadow-block);
     animation: dropIn .18s ease;
+    cursor:pointer;
   }
+  .a-block:active{transform:translateY(2px) scale(.95);}
   .a-block.empty{background:transparent; box-shadow:inset 0 0 0 1.5px dashed #C9BFA6; color:transparent;}
   @keyframes dropIn{from{transform:translateY(-8px) scale(.85); opacity:0;} to{transform:none; opacity:1;}}
 
@@ -271,6 +273,7 @@
     background:var(--beni); border-radius:10px; padding:14px 26px; opacity:0; pointer-events:none;
     box-shadow:0 8px 24px rgba(42,40,35,.3);
     display:flex; flex-direction:column; align-items:center; gap:2px;
+    max-width:82vw; text-align:center; word-break:keep-all;
   }
   .feedback-flash .stamp{font-size:30px;}
   .feedback-flash.show{animation: stampIn .55s cubic-bezier(.2,1.4,.4,1) forwards;}
@@ -409,7 +412,10 @@
     <div class="action-row">
       <button class="ghost-btn" id="hintBtn" onclick="useHint()">🔩 글자 공개 3회 남음</button>
       <button class="ghost-btn" onclick="clearAnswer()">지우기</button>
-      <button class="ghost-btn warn" onclick="togglePause()">일시정지</button>
+    </div>
+    <div class="action-row">
+      <button class="ghost-btn warn" onclick="giveUp()">포기(정답 보기)</button>
+      <button class="ghost-btn" onclick="togglePause()">일시정지</button>
     </div>
   </section>
 
@@ -711,6 +717,7 @@ let timerId = null;
 let countUp = 0;
 let hintUses = 3;
 let paused = false;
+let locked = false;
 let currentWasMissed = false;
 
 /* ---------- Pronunciation (Web Speech API) ---------- */
@@ -912,6 +919,7 @@ function loadWord(){
   if(qIndex >= queue.length){ finishGame(); return; }
   current = queue[qIndex];
   currentWasMissed = false;
+  locked = false;
   answer = [];
   hintUses = Math.min(hintUses, 3);
   document.getElementById('progLabel').textContent = `${qIndex+1} / ${queue.length}`;
@@ -952,8 +960,13 @@ function renderAnswerSlot(len){
   slot.innerHTML = "";
   for(let i=0;i<len;i++){
     const d = document.createElement('div');
-    d.className = 'a-block' + (answer[i] ? '' : ' empty');
-    d.textContent = answer[i] ? answer[i] : '';
+    const filled = answer[i];
+    d.className = 'a-block' + (filled ? '' : ' empty');
+    d.textContent = filled ? filled.char : '';
+    if(filled){
+      d.title = '눌러서 여기까지 되돌리기';
+      d.onclick = () => removeAnswerFrom(i);
+    }
     slot.appendChild(d);
   }
 }
@@ -971,17 +984,17 @@ function renderTileTray(){
 }
 
 function pickTile(id){
-  if(paused) return;
+  if(paused || locked) return;
   const t = tiles.find(x=>x.id===id);
   if(!t || t.used) return;
   t.used = true;
-  answer.push(t.char);
+  answer.push({char:t.char, tileId:t.id});
   renderTileTray();
   renderAnswerSlot(splitMora(current.reading).length);
 
   const target = splitMora(current.reading);
   if(answer.length === target.length){
-    if(answer.join('') === target.join('')){
+    if(answer.map(a=>a.char).join('') === target.join('')){
       handleCorrect();
     } else {
       handleWrong();
@@ -989,8 +1002,20 @@ function pickTile(id){
   }
 }
 
+/* Tap a tile you've already placed to undo back to (and including) that spot */
+function removeAnswerFrom(index){
+  if(paused || locked) return;
+  const removed = answer.splice(index);
+  removed.forEach(a=>{
+    const t = tiles.find(x=>x.id===a.tileId);
+    if(t) t.used = false;
+  });
+  renderTileTray();
+  renderAnswerSlot(splitMora(current.reading).length);
+}
+
 function clearAnswer(){
-  if(paused) return;
+  if(paused || locked) return;
   tiles.forEach(t=>t.used=false);
   answer = [];
   renderTileTray();
@@ -998,7 +1023,7 @@ function clearAnswer(){
 }
 
 function useHint(){
-  if(paused || hintUses<=0) return;
+  if(paused || locked || hintUses<=0) return;
   const target = splitMora(current.reading);
   const nextIdx = answer.length;
   if(nextIdx >= target.length) return;
@@ -1014,6 +1039,21 @@ function resetHintBtn(){
   const btn = document.getElementById('hintBtn');
   btn.textContent = `🔩 글자 공개 ${hintUses}회 남음`;
   btn.disabled = hintUses<=0;
+}
+
+/* Give up on the current word: reveal the correct answer, count it as missed, move on */
+function giveUp(){
+  if(paused || locked || !current) return;
+  locked = true;
+  if(!currentWasMissed){ missed.push(current); currentWasMissed = true; }
+  const target = splitMora(current.reading);
+  tiles.forEach(t=>t.used = true);
+  answer = target.map(c=>({char:c, tileId:-1}));
+  renderTileTray();
+  renderAnswerSlot(target.length);
+  flashFeedback(false, "정답: " + current.reading);
+  speakWord(current.reading);
+  setTimeout(()=>{ qIndex++; loadWord(); }, 1100);
 }
 
 function handleCorrect(){
