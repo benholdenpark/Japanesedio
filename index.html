@@ -148,6 +148,15 @@
   }
   .step-btn:active{transform:scale(.94);}
   .step-count{flex:1; text-align:center; font-family:'Shippori Mincho', serif; font-size:26px; font-weight:800; color:var(--sumi);}
+  .step-count-input{
+    flex:1; text-align:center; font-family:'Shippori Mincho', serif; font-size:26px; font-weight:800; color:var(--sumi);
+    background:none; border:none; border-bottom:1.5px dashed #C9BFA6; width:100%; padding:2px 0 4px;
+    -moz-appearance:textfield;
+  }
+  .step-count-input:focus{outline:none; border-bottom-color:var(--ai);}
+  .step-count-input::-webkit-outer-spin-button, .step-count-input::-webkit-inner-spin-button{
+    -webkit-appearance:none; margin:0;
+  }
 
   .toggle-row{display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:14px; border-top:1px solid var(--paper-line);}
   .toggle{
@@ -361,7 +370,9 @@
       </div>
       <div class="stepper">
         <button class="step-btn" onclick="changeCount(-1)">−</button>
-        <div class="step-count" id="countDisplay">18</div>
+        <input class="step-count-input" id="countDisplay" type="number" inputmode="numeric"
+               min="4" max="80" value="18"
+               onchange="setCountFromInput(this.value)" onblur="setCountFromInput(this.value)">
         <button class="step-btn" onclick="changeCount(1)">+</button>
       </div>
       <div class="toggle-row">
@@ -849,7 +860,14 @@ function updateCountLabel(){
 }
 function changeCount(d){
   lessonCount = Math.max(4, Math.min(80, lessonCount + d));
-  document.getElementById('countDisplay').textContent = lessonCount;
+  document.getElementById('countDisplay').value = lessonCount;
+}
+function setCountFromInput(v){
+  let n = parseInt(v, 10);
+  if(isNaN(n)) n = lessonCount;
+  n = Math.max(4, Math.min(80, n));
+  lessonCount = n;
+  document.getElementById('countDisplay').value = lessonCount;
 }
 function toggleFree(){
   freeMode = !freeMode;
@@ -911,12 +929,17 @@ function loadWord(){
   const mora = splitMora(current.reading);
   tiles = mora.map((c,i)=>({char:c, used:false, id:i}));
   let shuffled = [...tiles];
+  let attempts = 0;
   do {
     for(let i=shuffled.length-1;i>0;i--){
       const j = Math.floor(Math.random()*(i+1));
       [shuffled[i],shuffled[j]] = [shuffled[j],shuffled[i]];
     }
-  } while(mora.length > 1 && shuffled.every((t,i)=>t.char===mora[i]));
+    attempts++;
+    // For 2-tile words there are only 2 possible orders (original or swapped) —
+    // forcing "not equal to original" every time makes the swap deterministic,
+    // so we only insist on a genuine scramble once 3+ tiles give real variety.
+  } while(mora.length > 2 && attempts < 20 && shuffled.every((t,i)=>t.char===mora[i]));
   tiles = shuffled;
 
   renderAnswerSlot(mora.length);
@@ -1142,7 +1165,7 @@ function shareScore(){
 
 /* ---------- Boot ---------- */
 renderLevelList();
-document.getElementById('countDisplay').textContent = lessonCount;
+document.getElementById('countDisplay').value = lessonCount;
 </script>
 </body>
 </html>
