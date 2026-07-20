@@ -720,6 +720,42 @@ let paused = false;
 let locked = false;
 let currentWasMissed = false;
 
+/* ---------- Sound effects (synthesized, no audio files needed) ---------- */
+let audioCtx = null;
+function ensureAudio(){
+  if(!audioCtx){
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return null;
+    audioCtx = new Ctx();
+  }
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function playTone(freq, start, duration, type, peak){
+  const ctx = ensureAudio();
+  if(!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+  gain.gain.setValueAtTime(0, ctx.currentTime + start);
+  gain.gain.linearRampToValueAtTime(peak, ctx.currentTime + start + 0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + start + duration);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(ctx.currentTime + start);
+  osc.stop(ctx.currentTime + start + duration + 0.03);
+}
+function playCorrectSound(){
+  // bright little two-note chime, like a hanko stamp landing cleanly
+  playTone(880.0, 0,    0.11, 'triangle', 0.22);
+  playTone(1318.5, 0.08, 0.20, 'triangle', 0.20);
+}
+function playWrongSound(){
+  // short low buzz/thud
+  playTone(180, 0,    0.16, 'sawtooth', 0.14);
+  playTone(110, 0.05, 0.22, 'sawtooth', 0.11);
+}
+
 /* ---------- Pronunciation (Web Speech API) ---------- */
 let jaVoice = null;
 function loadJaVoice(){
@@ -897,6 +933,7 @@ function buildQueue(){
 function startGame(){
   queue = buildQueue();
   if(queue.length === 0) return;
+  ensureAudio();
   qIndex = 0; score = 0; missed = [];
   countUp = 0; timerSeconds = 0;
   clearInterval(timerId);
@@ -1052,6 +1089,7 @@ function giveUp(){
   renderTileTray();
   renderAnswerSlot(target.length);
   flashFeedback(false, "정답: " + current.reading);
+  playWrongSound();
   speakWord(current.reading);
   setTimeout(()=>{ qIndex++; loadWord(); }, 3000);
 }
@@ -1061,12 +1099,14 @@ function handleCorrect(){
   score += bonus;
   flashFeedback(true, `+${bonus}`);
   document.getElementById('scoreLabel').textContent = `${score} pts`;
+  playCorrectSound();
   speakWord(current.reading);
   setTimeout(()=>{ qIndex++; loadWord(); }, 480);
 }
 function handleWrong(){
   if(!currentWasMissed){ missed.push(current); currentWasMissed = true; }
   flashFeedback(false, "다시!");
+  playWrongSound();
   document.querySelector('.prompt-card').classList.add('shake');
   setTimeout(()=>{
     document.querySelector('.prompt-card').classList.remove('shake');
