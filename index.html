@@ -113,6 +113,28 @@
   .level-card.selected .level-check::after{
     content:"✓"; color:#fff; font-size:12px; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
   }
+  .study-btn{
+    width:30px; height:30px; border-radius:8px; border:1px solid var(--paper-line); background:#F1E9D8;
+    font-size:13px; cursor:pointer; flex:0 0 auto; display:flex; align-items:center; justify-content:center;
+    margin-right:2px;
+  }
+  .study-btn:active{transform:scale(.92);}
+
+  .study-list{display:flex; flex-direction:column; gap:6px;}
+  .study-item{
+    display:flex; align-items:center; gap:10px;
+    background:#F7F2E7; border:1px solid var(--paper-line); border-radius:9px; padding:9px 11px;
+  }
+  .study-idx{font-size:10px; color:var(--sumi-soft); width:20px; flex:0 0 auto; text-align:right;}
+  .study-word{flex:1; min-width:0;}
+  .study-kanji{font-family:'Shippori Mincho', serif; font-weight:700; font-size:14.5px; color:var(--sumi);}
+  .study-reading{font-size:12px; color:var(--ai-deep); margin-top:1px;}
+  .study-meaning{font-size:11.5px; color:var(--sumi-soft); margin-top:1px;}
+  .study-speak{
+    width:30px; height:30px; border-radius:50%; border:none; background:var(--ai-pale); color:var(--ai-deep);
+    font-size:13px; cursor:pointer; flex:0 0 auto;
+  }
+  .study-speak:active{transform:scale(.9);}
 
   .level-group{margin-bottom:10px;}
   .level-group-header{margin-bottom:0; border-radius:10px;}
@@ -472,6 +494,14 @@
     <div class="modal-head"><h3>순위표</h3><button onclick="closeModal('leaderboard')">✕</button></div>
     <div id="leaderboardBody"></div>
     <p class="empty-note" style="margin-top:6px;">※ 이 순위표는 이번 세션 동안만 유지됩니다.<br>구글 시트와 연동하려면 코드 상단의 SCRIPT_URL을 설정하세요.</p>
+  </div>
+</div>
+
+<!-- Study list modal -->
+<div class="modal-overlay" id="modal-study">
+  <div class="modal-sheet">
+    <div class="modal-head"><h3 id="studyTitle">단어 목록</h3><button onclick="closeModal('study')">✕</button></div>
+    <div id="studyBody"></div>
   </div>
 </div>
 
@@ -868,7 +898,9 @@ function renderLevelList(){
             <div class="level-name">${lv.name}</div>
             <div class="level-meta">${lv.desc} · ${lv.words.length}개</div>
           </div>
+          <button class="study-btn" title="단어 목록 보기">📄</button>
           <div class="level-check"></div>`;
+        card.querySelector('.study-btn').onclick = (ev) => openStudyList(key, ev);
         subList.appendChild(card);
       });
       groupWrap.appendChild(subList);
@@ -891,7 +923,9 @@ function renderLevelList(){
         <div class="level-name">${lv.name}</div>
         <div class="level-meta">${lv.desc} · ${lv.words.length}개</div>
       </div>
+      <button class="study-btn" title="단어 목록 보기">📄</button>
       <div class="level-check"></div>`;
+    card.querySelector('.study-btn').onclick = (ev) => openStudyList(key, ev);
     wrap.appendChild(card);
   });
   updateCountLabel();
@@ -1188,6 +1222,28 @@ function openModal(name){
 }
 function closeModal(name){
   document.getElementById('modal-'+name).classList.remove('show');
+}
+
+function openStudyList(key, ev){
+  if(ev) ev.stopPropagation();
+  const lv = LEVELS[key];
+  if(!lv) return;
+  document.getElementById('studyTitle').textContent = `${lv.name} · ${lv.words.length}개`;
+  const body = document.getElementById('studyBody');
+  body.innerHTML = `<div class="study-list">${lv.words.map((w,i)=>`
+    <div class="study-item">
+      <span class="study-idx">${i+1}</span>
+      <div class="study-word">
+        ${lv.showKanji ? `<div class="study-kanji">${w.kanji}</div>` : ''}
+        <div class="study-reading">${w.reading}</div>
+        <div class="study-meaning">${w.meaning}</div>
+      </div>
+      <button class="study-speak" data-reading="${w.reading}">🔊</button>
+    </div>`).join('')}</div>`;
+  body.querySelectorAll('.study-speak').forEach(btn=>{
+    btn.onclick = () => speakWord(btn.dataset.reading);
+  });
+  document.getElementById('modal-study').classList.add('show');
 }
 function renderHistory(){
   const wrap = document.getElementById('historyBody');
