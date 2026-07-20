@@ -120,19 +120,20 @@
   }
   .study-btn:active{transform:scale(.92);}
 
-  .study-list{display:flex; flex-direction:column; gap:6px;}
+  .study-list{display:flex; flex-direction:column; gap:8px;}
   .study-item{
-    display:flex; align-items:center; gap:10px;
-    background:#F7F2E7; border:1px solid var(--paper-line); border-radius:9px; padding:9px 11px;
+    display:grid; grid-template-columns:20px minmax(96px,1.2fr) minmax(70px,1fr) 36px;
+    align-items:center; column-gap:16px;
+    background:#F7F2E7; border:1px solid var(--paper-line); border-radius:9px; padding:12px 12px;
   }
-  .study-idx{font-size:10px; color:var(--sumi-soft); width:20px; flex:0 0 auto; text-align:right;}
-  .study-word{flex:1; min-width:0;}
-  .study-kanji{font-family:'Shippori Mincho', serif; font-weight:700; font-size:14.5px; color:var(--sumi);}
-  .study-reading{font-size:12px; color:var(--ai-deep); margin-top:1px;}
-  .study-meaning{font-size:11.5px; color:var(--sumi-soft); margin-top:1px;}
+  .study-idx{font-size:10px; color:var(--sumi-soft); text-align:right;}
+  .study-jp{min-width:0; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
+  .study-kanji{font-family:'Shippori Mincho', serif; font-weight:700; font-size:22px; color:var(--sumi); line-height:1.3;}
+  .study-reading{font-family:'Shippori Mincho', serif; font-size:19px; font-weight:700; color:var(--ai-deep); line-height:1.3;}
+  .study-meaning{font-size:13.5px; color:var(--sumi-soft); line-height:1.4;}
   .study-speak{
-    width:30px; height:30px; border-radius:50%; border:none; background:var(--ai-pale); color:var(--ai-deep);
-    font-size:13px; cursor:pointer; flex:0 0 auto;
+    width:32px; height:32px; border-radius:50%; border:none; background:var(--ai-pale); color:var(--ai-deep);
+    font-size:14px; cursor:pointer; flex:0 0 auto;
   }
   .study-speak:active{transform:scale(.9);}
 
@@ -621,108 +622,116 @@ const LEVELS = {
       {reading:"きもち", meaning:"기분 / 마음"}, {reading:"こころ", meaning:"마음"}
     ]
   },
-  katakana: {
-    name: "가타카나 외래어", glyph: "ア", tag: "KATAKANA",
-    desc: "일상 속 외래어",
+  katakana1: {
+    name: "가타카나 1단계", glyph: "ア", tag: "KATAKANA 1",
+    desc: "일상 생활 외래어",
     words: [
-      {reading:"コーヒー", meaning:"커피"}, {reading:"テレビ", meaning:"텔레비전"},
-      {reading:"カメラ", meaning:"카메라"}, {reading:"パソコン", meaning:"컴퓨터"},
-      {reading:"アイスクリーム", meaning:"아이스크림"}, {reading:"サッカー", meaning:"축구"},
-      {reading:"バナナ", meaning:"바나나"}, {reading:"タクシー", meaning:"택시"},
-      {reading:"ホテル", meaning:"호텔"}, {reading:"レストラン", meaning:"레스토랑"},
-      {reading:"ノート", meaning:"노트"}, {reading:"ペン", meaning:"펜"},
-      {reading:"バス", meaning:"버스"}, {reading:"ケーキ", meaning:"케이크"},
-      {reading:"ピアノ", meaning:"피아노"}, {reading:"ギター", meaning:"기타"},
-      {reading:"インターネット", meaning:"인터넷"}, {reading:"スマートフォン", meaning:"스마트폰"},
-      {reading:"パン", meaning:"빵"}, {reading:"ジュース", meaning:"주스"},
-      {reading:"ミルク", meaning:"우유"}, {reading:"サラダ", meaning:"샐러드"},
-      {reading:"ハンバーガー", meaning:"햄버거"}, {reading:"ピザ", meaning:"피자"},
-      {reading:"チーズ", meaning:"치즈"}, {reading:"チョコレート", meaning:"초콜릿"},
-      {reading:"アルバイト", meaning:"아르바이트"}, {reading:"デパート", meaning:"백화점"},
-      {reading:"スーパー", meaning:"슈퍼마켓"}, {reading:"エレベーター", meaning:"엘리베이터"},
-      {reading:"トイレ", meaning:"화장실"}, {reading:"シャワー", meaning:"샤워"},
-      {reading:"ソファ", meaning:"소파"}, {reading:"テーブル", meaning:"테이블"},
-      {reading:"ドア", meaning:"문"}, {reading:"カード", meaning:"카드"},
-      {reading:"チケット", meaning:"티켓"}, {reading:"プレゼント", meaning:"선물"},
-      {reading:"イベント", meaning:"이벤트"}, {reading:"メール", meaning:"메일"}
+      {reading:"コーヒー", meaning:"커피"}, {reading:"テレビ", meaning:"텔레비전"}, {reading:"カメラ", meaning:"카메라"}, {reading:"パソコン", meaning:"컴퓨터"}, {reading:"アイスクリーム", meaning:"아이스크림"}, {reading:"サッカー", meaning:"축구"}, {reading:"バナナ", meaning:"바나나"}, {reading:"タクシー", meaning:"택시"}, {reading:"ホテル", meaning:"호텔"}, {reading:"レストラン", meaning:"레스토랑"}, {reading:"ノート", meaning:"노트"}, {reading:"ペン", meaning:"펜"}, {reading:"バス", meaning:"버스"}, {reading:"ケーキ", meaning:"케이크"}, {reading:"ピアノ", meaning:"피아노"}, {reading:"ギター", meaning:"기타"}, {reading:"インターネット", meaning:"인터넷"}, {reading:"スマートフォン", meaning:"스마트폰"}, {reading:"パン", meaning:"빵"}, {reading:"ジュース", meaning:"주스"}, {reading:"ミルク", meaning:"우유"}, {reading:"サラダ", meaning:"샐러드"}, {reading:"ハンバーガー", meaning:"햄버거"}, {reading:"ピザ", meaning:"피자"}, {reading:"チーズ", meaning:"치즈"}, {reading:"チョコレート", meaning:"초콜릿"}, {reading:"アルバイト", meaning:"아르바이트"}, {reading:"デパート", meaning:"백화점"}, {reading:"スーパー", meaning:"슈퍼마켓"}, {reading:"エレベーター", meaning:"엘리베이터"}, {reading:"トイレ", meaning:"화장실"}, {reading:"シャワー", meaning:"샤워"}, {reading:"ソファ", meaning:"소파"}, {reading:"テーブル", meaning:"테이블"}, {reading:"ドア", meaning:"문"}, {reading:"カード", meaning:"카드"}, {reading:"チケット", meaning:"티켓"}, {reading:"プレゼント", meaning:"선물"}, {reading:"イベント", meaning:"이벤트"}, {reading:"メール", meaning:"메일"}
     ]
   },
-  kanji: {
-    name: "한자 읽기 연습", glyph: "読", tag: "KANJI READING",
-    desc: "한자를 보고 요미가나 조립", showKanji:true,
+  katakana2: {
+    name: "가타카나 2단계", glyph: "ア", tag: "KATAKANA 2",
+    desc: "여행·쇼핑 관련 외래어",
     words: [
-      {kanji:"学校", reading:"がっこう", meaning:"학교"}, {kanji:"先生", reading:"せんせい", meaning:"선생님"},
-      {kanji:"天気", reading:"てんき", meaning:"날씨"}, {kanji:"時間", reading:"じかん", meaning:"시간"},
-      {kanji:"友達", reading:"ともだち", meaning:"친구"}, {kanji:"勉強", reading:"べんきょう", meaning:"공부"},
-      {kanji:"図書館", reading:"としょかん", meaning:"도서관"}, {kanji:"食堂", reading:"しょくどう", meaning:"식당"},
-      {kanji:"病院", reading:"びょういん", meaning:"병원"}, {kanji:"駅", reading:"えき", meaning:"역"},
-      {kanji:"会社", reading:"かいしゃ", meaning:"회사"}, {kanji:"仕事", reading:"しごと", meaning:"일 / 직업"},
-      {kanji:"新聞", reading:"しんぶん", meaning:"신문"}, {kanji:"電話", reading:"でんわ", meaning:"전화"},
-      {kanji:"写真", reading:"しゃしん", meaning:"사진"}, {kanji:"音楽", reading:"おんがく", meaning:"음악"},
-      {kanji:"映画", reading:"えいが", meaning:"영화"}, {kanji:"料理", reading:"りょうり", meaning:"요리"},
-      {kanji:"公園", reading:"こうえん", meaning:"공원"}, {kanji:"教室", reading:"きょうしつ", meaning:"교실"},
-      {kanji:"宿題", reading:"しゅくだい", meaning:"숙제"}, {kanji:"試験", reading:"しけん", meaning:"시험"},
-      {kanji:"授業", reading:"じゅぎょう", meaning:"수업"}, {kanji:"夏休み", reading:"なつやすみ", meaning:"여름방학"},
-      {kanji:"誕生日", reading:"たんじょうび", meaning:"생일"}, {kanji:"家族", reading:"かぞく", meaning:"가족"},
-      {kanji:"兄弟", reading:"きょうだい", meaning:"형제"}, {kanji:"両親", reading:"りょうしん", meaning:"부모"},
-      {kanji:"近所", reading:"きんじょ", meaning:"근처 / 이웃"}, {kanji:"郵便局", reading:"ゆうびんきょく", meaning:"우체국"},
-      {kanji:"銀行", reading:"ぎんこう", meaning:"은행"}, {kanji:"動物園", reading:"どうぶつえん", meaning:"동물원"},
-      {kanji:"体育館", reading:"たいいくかん", meaning:"체육관"}, {kanji:"昼休み", reading:"ひるやすみ", meaning:"점심시간"},
-      {kanji:"予定", reading:"よてい", meaning:"예정 / 계획"}, {kanji:"週末", reading:"しゅうまつ", meaning:"주말"},
-      {kanji:"今週", reading:"こんしゅう", meaning:"이번 주"}, {kanji:"来週", reading:"らいしゅう", meaning:"다음 주"},
-      {kanji:"先週", reading:"せんしゅう", meaning:"지난 주"}, {kanji:"質問", reading:"しつもん", meaning:"질문"}
+      {reading:"パスポート", meaning:"여권"}, {reading:"スーツケース", meaning:"여행 가방"}, {reading:"チェックイン", meaning:"체크인"}, {reading:"フロント", meaning:"프런트 / 안내데스크"}, {reading:"ロビー", meaning:"로비"}, {reading:"エアコン", meaning:"에어컨"}, {reading:"カレンダー", meaning:"달력"}, {reading:"サイズ", meaning:"사이즈"}, {reading:"セール", meaning:"세일"}, {reading:"ポイント", meaning:"포인트"}, {reading:"レシート", meaning:"영수증"}, {reading:"バーゲン", meaning:"바겐세일"}, {reading:"ショッピング", meaning:"쇼핑"}, {reading:"ブランド", meaning:"브랜드"}, {reading:"デザイン", meaning:"디자인"}, {reading:"カラー", meaning:"컬러 / 색"}, {reading:"スタイル", meaning:"스타일"}, {reading:"サングラス", meaning:"선글라스"}, {reading:"アクセサリー", meaning:"액세서리"}, {reading:"ハンドバッグ", meaning:"핸드백"}, {reading:"スニーカー", meaning:"운동화"}, {reading:"ジャケット", meaning:"재킷"}, {reading:"コート", meaning:"코트"}, {reading:"スカーフ", meaning:"스카프"}, {reading:"タオル", meaning:"수건"}, {reading:"シャンプー", meaning:"샴푸"}, {reading:"ロッカー", meaning:"사물함"}, {reading:"プラットホーム", meaning:"플랫폼"}, {reading:"マップ", meaning:"지도"}, {reading:"ガイド", meaning:"가이드"}, {reading:"ツアー", meaning:"투어"}, {reading:"ビザ", meaning:"비자"}, {reading:"カフェ", meaning:"카페"}, {reading:"ラウンジ", meaning:"라운지"}, {reading:"ターミナル", meaning:"터미널"}, {reading:"モール", meaning:"쇼핑몰"}, {reading:"アウトレット", meaning:"아울렛"}, {reading:"チップ", meaning:"팁"}, {reading:"サイン", meaning:"사인"}, {reading:"ボーナス", meaning:"보너스"}
     ]
   },
-  n5: {
-    name: "JLPT N5 어휘", glyph: "五", tag: "JLPT N5",
+  katakana3: {
+    name: "가타카나 3단계", glyph: "ア", tag: "KATAKANA 3",
+    desc: "스포츠·취미·엔터테인먼트",
+    words: [
+      {reading:"テニス", meaning:"테니스"}, {reading:"バレーボール", meaning:"배구"}, {reading:"バスケットボール", meaning:"농구"}, {reading:"ゴルフ", meaning:"골프"}, {reading:"スキー", meaning:"스키"}, {reading:"スケート", meaning:"스케이트"}, {reading:"マラソン", meaning:"마라톤"}, {reading:"チーム", meaning:"팀"}, {reading:"コーチ", meaning:"코치"}, {reading:"トレーニング", meaning:"트레이닝 / 훈련"}, {reading:"ジム", meaning:"헬스장"}, {reading:"ヨガ", meaning:"요가"}, {reading:"ダンス", meaning:"댄스"}, {reading:"コンサート", meaning:"콘서트"}, {reading:"アルバム", meaning:"앨범"}, {reading:"メロディー", meaning:"멜로디"}, {reading:"リズム", meaning:"리듬"}, {reading:"ドラマ", meaning:"드라마"}, {reading:"アニメ", meaning:"애니메이션"}, {reading:"キャラクター", meaning:"캐릭터"}, {reading:"ストーリー", meaning:"스토리"}, {reading:"シーン", meaning:"장면"}, {reading:"カメラマン", meaning:"카메라맨"}, {reading:"スタジオ", meaning:"스튜디오"}, {reading:"チャンネル", meaning:"채널"}, {reading:"ニュース", meaning:"뉴스"}, {reading:"インタビュー", meaning:"인터뷰"}, {reading:"ファン", meaning:"팬"}, {reading:"アイドル", meaning:"아이돌"}, {reading:"コンテスト", meaning:"콘테스트"}, {reading:"ゲーム", meaning:"게임"}, {reading:"パズル", meaning:"퍼즐"}, {reading:"キャンプ", meaning:"캠핑"}, {reading:"ピクニック", meaning:"소풍"}, {reading:"バーベキュー", meaning:"바비큐"}, {reading:"フェスティバル", meaning:"페스티벌"}, {reading:"パレード", meaning:"퍼레이드"}, {reading:"ボランティア", meaning:"자원봉사"}, {reading:"サークル", meaning:"동아리"}, {reading:"クラブ", meaning:"클럽"}
+    ]
+  },
+  katakana4: {
+    name: "가타카나 4단계", glyph: "ア", tag: "KATAKANA 4",
+    desc: "IT·비즈니스 외래어",
+    words: [
+      {reading:"コンピューター", meaning:"컴퓨터"}, {reading:"データ", meaning:"데이터"}, {reading:"ファイル", meaning:"파일"}, {reading:"ソフト", meaning:"소프트웨어"}, {reading:"アプリ", meaning:"앱"}, {reading:"システム", meaning:"시스템"}, {reading:"ネットワーク", meaning:"네트워크"}, {reading:"サーバー", meaning:"서버"}, {reading:"パスワード", meaning:"비밀번호"}, {reading:"アカウント", meaning:"계정"}, {reading:"メッセージ", meaning:"메시지"}, {reading:"メニュー", meaning:"메뉴"}, {reading:"ボタン", meaning:"버튼"}, {reading:"スクリーン", meaning:"스크린 / 화면"}, {reading:"プリンター", meaning:"프린터"}, {reading:"コピー", meaning:"복사"}, {reading:"スキャン", meaning:"스캔"}, {reading:"プロジェクト", meaning:"프로젝트"}, {reading:"ミーティング", meaning:"미팅"}, {reading:"スケジュール", meaning:"스케줄"}, {reading:"レポート", meaning:"보고서"}, {reading:"プレゼンテーション", meaning:"발표"}, {reading:"マネージャー", meaning:"매니저"}, {reading:"リーダー", meaning:"리더"}, {reading:"スタッフ", meaning:"스태프 / 직원"}, {reading:"オフィス", meaning:"사무실"}, {reading:"デスク", meaning:"책상(사무용)"}, {reading:"ファックス", meaning:"팩스"}, {reading:"コスト", meaning:"비용"}, {reading:"バランス", meaning:"균형"}, {reading:"リスク", meaning:"위험 요소"}, {reading:"チャンス", meaning:"기회"}, {reading:"アイデア", meaning:"아이디어"}, {reading:"プラン", meaning:"플랜 / 계획"}, {reading:"ターゲット", meaning:"타깃"}, {reading:"マーケット", meaning:"시장"}, {reading:"サービス", meaning:"서비스"}, {reading:"クレジットカード", meaning:"신용카드"}, {reading:"キャンセル", meaning:"취소"}, {reading:"コミュニケーション", meaning:"커뮤니케이션"}
+    ]
+  },
+  kanji1: {
+    name: "한자 읽기 1단계", glyph: "読", tag: "KANJI 1",
+    desc: "학교·일상 기본 한자어", showKanji:true,
+    words: [
+      {kanji:"学校", reading:"がっこう", meaning:"학교"}, {kanji:"先生", reading:"せんせい", meaning:"선생님"}, {kanji:"天気", reading:"てんき", meaning:"날씨"}, {kanji:"時間", reading:"じかん", meaning:"시간"}, {kanji:"友達", reading:"ともだち", meaning:"친구"}, {kanji:"勉強", reading:"べんきょう", meaning:"공부"}, {kanji:"図書館", reading:"としょかん", meaning:"도서관"}, {kanji:"食堂", reading:"しょくどう", meaning:"식당"}, {kanji:"病院", reading:"びょういん", meaning:"병원"}, {kanji:"駅", reading:"えき", meaning:"역"}, {kanji:"会社", reading:"かいしゃ", meaning:"회사"}, {kanji:"仕事", reading:"しごと", meaning:"일 / 직업"}, {kanji:"新聞", reading:"しんぶん", meaning:"신문"}, {kanji:"電話", reading:"でんわ", meaning:"전화"}, {kanji:"写真", reading:"しゃしん", meaning:"사진"}, {kanji:"音楽", reading:"おんがく", meaning:"음악"}, {kanji:"映画", reading:"えいが", meaning:"영화"}, {kanji:"料理", reading:"りょうり", meaning:"요리"}, {kanji:"公園", reading:"こうえん", meaning:"공원"}, {kanji:"教室", reading:"きょうしつ", meaning:"교실"}, {kanji:"宿題", reading:"しゅくだい", meaning:"숙제"}, {kanji:"試験", reading:"しけん", meaning:"시험"}, {kanji:"授業", reading:"じゅぎょう", meaning:"수업"}, {kanji:"夏休み", reading:"なつやすみ", meaning:"여름방학"}, {kanji:"誕生日", reading:"たんじょうび", meaning:"생일"}, {kanji:"家族", reading:"かぞく", meaning:"가족"}, {kanji:"兄弟", reading:"きょうだい", meaning:"형제"}, {kanji:"両親", reading:"りょうしん", meaning:"부모"}, {kanji:"近所", reading:"きんじょ", meaning:"근처 / 이웃"}, {kanji:"郵便局", reading:"ゆうびんきょく", meaning:"우체국"}, {kanji:"銀行", reading:"ぎんこう", meaning:"은행"}, {kanji:"動物園", reading:"どうぶつえん", meaning:"동물원"}, {kanji:"体育館", reading:"たいいくかん", meaning:"체육관"}, {kanji:"昼休み", reading:"ひるやすみ", meaning:"점심시간"}, {kanji:"予定", reading:"よてい", meaning:"예정 / 계획"}, {kanji:"週末", reading:"しゅうまつ", meaning:"주말"}, {kanji:"今週", reading:"こんしゅう", meaning:"이번 주"}, {kanji:"来週", reading:"らいしゅう", meaning:"다음 주"}, {kanji:"先週", reading:"せんしゅう", meaning:"지난 주"}, {kanji:"質問", reading:"しつもん", meaning:"질문"}
+    ]
+  },
+  kanji2: {
+    name: "한자 읽기 2단계", glyph: "読", tag: "KANJI 2",
+    desc: "자연·장소·사회 한자어", showKanji:true,
+    words: [
+      {kanji:"天気予報", reading:"てんきよほう", meaning:"일기예보"}, {kanji:"台風", reading:"たいふう", meaning:"태풍"}, {kanji:"季節", reading:"きせつ", meaning:"계절"}, {kanji:"山道", reading:"やまみち", meaning:"산길"}, {kanji:"海岸", reading:"かいがん", meaning:"해안"}, {kanji:"空港", reading:"くうこう", meaning:"공항"}, {kanji:"港", reading:"みなと", meaning:"항구"}, {kanji:"都市", reading:"とし", meaning:"도시"}, {kanji:"田舎", reading:"いなか", meaning:"시골"}, {kanji:"建物", reading:"たてもの", meaning:"건물"}, {kanji:"事務所", reading:"じむしょ", meaning:"사무실"}, {kanji:"工場", reading:"こうじょう", meaning:"공장"}, {kanji:"市場", reading:"いちば", meaning:"재래시장"}, {kanji:"商店街", reading:"しょうてんがい", meaning:"상점가"}, {kanji:"交差点", reading:"こうさてん", meaning:"교차로"}, {kanji:"信号", reading:"しんごう", meaning:"신호(등)"}, {kanji:"道路", reading:"どうろ", meaning:"도로"}, {kanji:"橋", reading:"はし", meaning:"다리(건축물)"}, {kanji:"川岸", reading:"かわぎし", meaning:"강가"}, {kanji:"森林", reading:"しんりん", meaning:"삼림"}, {kanji:"農業", reading:"のうぎょう", meaning:"농업"}, {kanji:"漁業", reading:"ぎょぎょう", meaning:"어업"}, {kanji:"工業", reading:"こうぎょう", meaning:"공업"}, {kanji:"貿易", reading:"ぼうえき", meaning:"무역"}, {kanji:"輸出", reading:"ゆしゅつ", meaning:"수출"}, {kanji:"輸入", reading:"ゆにゅう", meaning:"수입"}, {kanji:"人口", reading:"じんこう", meaning:"인구"}, {kanji:"政治", reading:"せいじ", meaning:"정치"}, {kanji:"選挙", reading:"せんきょ", meaning:"선거"}, {kanji:"法律", reading:"ほうりつ", meaning:"법률"}, {kanji:"裁判", reading:"さいばん", meaning:"재판"}, {kanji:"警察", reading:"けいさつ", meaning:"경찰"}, {kanji:"消防", reading:"しょうぼう", meaning:"소방"}, {kanji:"事故", reading:"じこ", meaning:"사고"}, {kanji:"事件", reading:"じけん", meaning:"사건"}, {kanji:"災害", reading:"さいがい", meaning:"재해"}, {kanji:"地震", reading:"じしん", meaning:"지진"}, {kanji:"台所", reading:"だいどころ", meaning:"부엌"}, {kanji:"洗濯機", reading:"せんたくき", meaning:"세탁기"}, {kanji:"冷蔵庫", reading:"れいぞうこ", meaning:"냉장고"}
+    ]
+  },
+  kanji3: {
+    name: "한자 읽기 3단계", glyph: "読", tag: "KANJI 3",
+    desc: "감정·인간관계 한자어", showKanji:true,
+    words: [
+      {kanji:"気持ち", reading:"きもち", meaning:"기분 / 마음"}, {kanji:"表情", reading:"ひょうじょう", meaning:"표정"}, {kanji:"感情", reading:"かんじょう", meaning:"감정"}, {kanji:"心配", reading:"しんぱい", meaning:"걱정"}, {kanji:"安心", reading:"あんしん", meaning:"안심"}, {kanji:"緊張", reading:"きんちょう", meaning:"긴장"}, {kanji:"興奮", reading:"こうふん", meaning:"흥분"}, {kanji:"我慢", reading:"がまん", meaning:"참음 / 인내"}, {kanji:"恋愛", reading:"れんあい", meaning:"연애"}, {kanji:"結婚式", reading:"けっこんしき", meaning:"결혼식"}, {kanji:"夫婦", reading:"ふうふ", meaning:"부부"}, {kanji:"恋人", reading:"こいびと", meaning:"연인"}, {kanji:"親友", reading:"しんゆう", meaning:"친한 친구"}, {kanji:"先輩", reading:"せんぱい", meaning:"선배"}, {kanji:"後輩", reading:"こうはい", meaning:"후배"}, {kanji:"上司", reading:"じょうし", meaning:"상사"}, {kanji:"部下", reading:"ぶか", meaning:"부하"}, {kanji:"同僚", reading:"どうりょう", meaning:"동료"}, {kanji:"隣人", reading:"りんじん", meaning:"이웃"}, {kanji:"恩人", reading:"おんじん", meaning:"은인"}, {kanji:"性別", reading:"せいべつ", meaning:"성별"}, {kanji:"年齢", reading:"ねんれい", meaning:"연령 / 나이"}, {kanji:"身長", reading:"しんちょう", meaning:"신장 / 키"}, {kanji:"体重", reading:"たいじゅう", meaning:"체중"}, {kanji:"血液型", reading:"けつえきがた", meaning:"혈액형"}, {kanji:"記念日", reading:"きねんび", meaning:"기념일"}, {kanji:"約束", reading:"やくそく", meaning:"약속"}, {kanji:"秘密", reading:"ひみつ", meaning:"비밀"}, {kanji:"噂", reading:"うわさ", meaning:"소문"}, {kanji:"誤解", reading:"ごかい", meaning:"오해"}, {kanji:"喧嘩", reading:"けんか", meaning:"싸움"}, {kanji:"仲直り", reading:"なかなおり", meaning:"화해"}, {kanji:"感謝", reading:"かんしゃ", meaning:"감사"}, {kanji:"尊敬", reading:"そんけい", meaning:"존경"}, {kanji:"信頼", reading:"しんらい", meaning:"신뢰"}, {kanji:"期待", reading:"きたい", meaning:"기대"}, {kanji:"満足", reading:"まんぞく", meaning:"만족"}, {kanji:"後悔", reading:"こうかい", meaning:"후회"}, {kanji:"反省", reading:"はんせい", meaning:"반성"}, {kanji:"決心", reading:"けっしん", meaning:"결심"}
+    ]
+  },
+  kanji4: {
+    name: "한자 읽기 4단계", glyph: "読", tag: "KANJI 4",
+    desc: "학업·직업 심화 한자어", showKanji:true,
+    words: [
+      {kanji:"大学", reading:"だいがく", meaning:"대학교"}, {kanji:"大学院", reading:"だいがくいん", meaning:"대학원"}, {kanji:"専攻", reading:"せんこう", meaning:"전공"}, {kanji:"卒業", reading:"そつぎょう", meaning:"졸업"}, {kanji:"入学", reading:"にゅうがく", meaning:"입학"}, {kanji:"就職", reading:"しゅうしょく", meaning:"취직"}, {kanji:"面接", reading:"めんせつ", meaning:"면접"}, {kanji:"履歴書", reading:"りれきしょ", meaning:"이력서"}, {kanji:"給料", reading:"きゅうりょう", meaning:"급여"}, {kanji:"会議", reading:"かいぎ", meaning:"회의"}, {kanji:"契約", reading:"けいやく", meaning:"계약"}, {kanji:"責任", reading:"せきにん", meaning:"책임"}, {kanji:"役割", reading:"やくわり", meaning:"역할"}, {kanji:"部長", reading:"ぶちょう", meaning:"부장"}, {kanji:"課長", reading:"かちょう", meaning:"과장"}, {kanji:"社長", reading:"しゃちょう", meaning:"사장"}, {kanji:"支店", reading:"してん", meaning:"지점"}, {kanji:"本社", reading:"ほんしゃ", meaning:"본사"}, {kanji:"出張", reading:"しゅっちょう", meaning:"출장"}, {kanji:"残業", reading:"ざんぎょう", meaning:"야근"}, {kanji:"休暇", reading:"きゅうか", meaning:"휴가"}, {kanji:"定年", reading:"ていねん", meaning:"정년"}, {kanji:"退職", reading:"たいしょく", meaning:"퇴직"}, {kanji:"年金", reading:"ねんきん", meaning:"연금"}, {kanji:"税金", reading:"ぜいきん", meaning:"세금"}, {kanji:"給食", reading:"きゅうしょく", meaning:"급식"}, {kanji:"教科書", reading:"きょうかしょ", meaning:"교과서"}, {kanji:"辞書", reading:"じしょ", meaning:"사전"}, {kanji:"発音", reading:"はつおん", meaning:"발음"}, {kanji:"文法", reading:"ぶんぽう", meaning:"문법"}, {kanji:"単語", reading:"たんご", meaning:"단어"}, {kanji:"漢字", reading:"かんじ", meaning:"한자"}, {kanji:"作文", reading:"さくぶん", meaning:"작문"}, {kanji:"論文", reading:"ろんぶん", meaning:"논문"}, {kanji:"研究", reading:"けんきゅう", meaning:"연구"}, {kanji:"実験", reading:"じっけん", meaning:"실험"}, {kanji:"技術", reading:"ぎじゅつ", meaning:"기술"}, {kanji:"発明", reading:"はつめい", meaning:"발명"}, {kanji:"発展", reading:"はってん", meaning:"발전"}, {kanji:"産業", reading:"さんぎょう", meaning:"산업"}
+    ]
+  },
+  n5_1: {
+    name: "JLPT N5 1단계", glyph: "五", tag: "JLPT N5-1",
     desc: "기초 동사·형용사", showKanji:true,
     words: [
-      {kanji:"毎日", reading:"まいにち", meaning:"매일"}, {kanji:"朝ご飯", reading:"あさごはん", meaning:"아침밥"},
-      {kanji:"出かける", reading:"でかける", meaning:"외출하다"}, {kanji:"買う", reading:"かう", meaning:"사다"},
-      {kanji:"飲む", reading:"のむ", meaning:"마시다"}, {kanji:"食べる", reading:"たべる", meaning:"먹다"},
-      {kanji:"行く", reading:"いく", meaning:"가다"}, {kanji:"来る", reading:"くる", meaning:"오다"},
-      {kanji:"見る", reading:"みる", meaning:"보다"}, {kanji:"聞く", reading:"きく", meaning:"듣다"},
-      {kanji:"話す", reading:"はなす", meaning:"말하다"}, {kanji:"読む", reading:"よむ", meaning:"읽다"},
-      {kanji:"書く", reading:"かく", meaning:"쓰다"}, {kanji:"高い", reading:"たかい", meaning:"비싸다 / 높다"},
-      {kanji:"安い", reading:"やすい", meaning:"싸다"}, {kanji:"大きい", reading:"おおきい", meaning:"크다"},
-      {kanji:"小さい", reading:"ちいさい", meaning:"작다"}, {kanji:"新しい", reading:"あたらしい", meaning:"새롭다"},
-      {kanji:"古い", reading:"ふるい", meaning:"낡다 / 오래되다"}, {kanji:"暑い", reading:"あつい", meaning:"덥다"},
-      {kanji:"寒い", reading:"さむい", meaning:"춥다"}, {kanji:"忙しい", reading:"いそがしい", meaning:"바쁘다"},
-      {kanji:"楽しい", reading:"たのしい", meaning:"즐겁다"}, {kanji:"難しい", reading:"むずかしい", meaning:"어렵다"},
-      {kanji:"易しい", reading:"やさしい", meaning:"쉽다"}, {kanji:"起きる", reading:"おきる", meaning:"일어나다"},
-      {kanji:"寝る", reading:"ねる", meaning:"자다"}, {kanji:"働く", reading:"はたらく", meaning:"일하다"},
-      {kanji:"休む", reading:"やすむ", meaning:"쉬다"}, {kanji:"分かる", reading:"わかる", meaning:"이해하다 / 알다"},
-      {kanji:"知る", reading:"しる", meaning:"알다"}, {kanji:"待つ", reading:"まつ", meaning:"기다리다"},
-      {kanji:"乗る", reading:"のる", meaning:"타다"}, {kanji:"降りる", reading:"おりる", meaning:"내리다"},
-      {kanji:"開ける", reading:"あける", meaning:"열다"}, {kanji:"閉める", reading:"しめる", meaning:"닫다"},
-      {kanji:"使う", reading:"つかう", meaning:"사용하다"}, {kanji:"作る", reading:"つくる", meaning:"만들다"},
-      {kanji:"教える", reading:"おしえる", meaning:"가르치다"}, {kanji:"習う", reading:"ならう", meaning:"배우다"}
+      {kanji:"毎日", reading:"まいにち", meaning:"매일"}, {kanji:"朝ご飯", reading:"あさごはん", meaning:"아침밥"}, {kanji:"出かける", reading:"でかける", meaning:"외출하다"}, {kanji:"買う", reading:"かう", meaning:"사다"}, {kanji:"飲む", reading:"のむ", meaning:"마시다"}, {kanji:"食べる", reading:"たべる", meaning:"먹다"}, {kanji:"行く", reading:"いく", meaning:"가다"}, {kanji:"来る", reading:"くる", meaning:"오다"}, {kanji:"見る", reading:"みる", meaning:"보다"}, {kanji:"聞く", reading:"きく", meaning:"듣다"}, {kanji:"話す", reading:"はなす", meaning:"말하다"}, {kanji:"読む", reading:"よむ", meaning:"읽다"}, {kanji:"書く", reading:"かく", meaning:"쓰다"}, {kanji:"高い", reading:"たかい", meaning:"비싸다 / 높다"}, {kanji:"安い", reading:"やすい", meaning:"싸다"}, {kanji:"大きい", reading:"おおきい", meaning:"크다"}, {kanji:"小さい", reading:"ちいさい", meaning:"작다"}, {kanji:"新しい", reading:"あたらしい", meaning:"새롭다"}, {kanji:"古い", reading:"ふるい", meaning:"낡다 / 오래되다"}, {kanji:"暑い", reading:"あつい", meaning:"덥다"}, {kanji:"寒い", reading:"さむい", meaning:"춥다"}, {kanji:"忙しい", reading:"いそがしい", meaning:"바쁘다"}, {kanji:"楽しい", reading:"たのしい", meaning:"즐겁다"}, {kanji:"難しい", reading:"むずかしい", meaning:"어렵다"}, {kanji:"易しい", reading:"やさしい", meaning:"쉽다"}, {kanji:"起きる", reading:"おきる", meaning:"일어나다"}, {kanji:"寝る", reading:"ねる", meaning:"자다"}, {kanji:"働く", reading:"はたらく", meaning:"일하다"}, {kanji:"休む", reading:"やすむ", meaning:"쉬다"}, {kanji:"分かる", reading:"わかる", meaning:"이해하다 / 알다"}, {kanji:"知る", reading:"しる", meaning:"알다"}, {kanji:"待つ", reading:"まつ", meaning:"기다리다"}, {kanji:"乗る", reading:"のる", meaning:"타다"}, {kanji:"降りる", reading:"おりる", meaning:"내리다"}, {kanji:"開ける", reading:"あける", meaning:"열다"}, {kanji:"閉める", reading:"しめる", meaning:"닫다"}, {kanji:"使う", reading:"つかう", meaning:"사용하다"}, {kanji:"作る", reading:"つくる", meaning:"만들다"}, {kanji:"教える", reading:"おしえる", meaning:"가르치다"}, {kanji:"習う", reading:"ならう", meaning:"배우다"}
     ]
   },
-  n4: {
-    name: "JLPT N4 어휘", glyph: "四", tag: "JLPT N4",
-    desc: "추상 명사 중심 심화 어휘", showKanji:true,
+  n5_2: {
+    name: "JLPT N5 2단계", glyph: "五", tag: "JLPT N5-2",
+    desc: "기초 명사·인칭·장소", showKanji:true,
     words: [
-      {kanji:"経験", reading:"けいけん", meaning:"경험"}, {kanji:"準備", reading:"じゅんび", meaning:"준비"},
-      {kanji:"説明", reading:"せつめい", meaning:"설명"}, {kanji:"経済", reading:"けいざい", meaning:"경제"},
-      {kanji:"社会", reading:"しゃかい", meaning:"사회"}, {kanji:"文化", reading:"ぶんか", meaning:"문화"},
-      {kanji:"歴史", reading:"れきし", meaning:"역사"}, {kanji:"理由", reading:"りゆう", meaning:"이유"},
-      {kanji:"性格", reading:"せいかく", meaning:"성격"}, {kanji:"習慣", reading:"しゅうかん", meaning:"습관"},
-      {kanji:"必要", reading:"ひつよう", meaning:"필요"}, {kanji:"可能", reading:"かのう", meaning:"가능"},
-      {kanji:"自由", reading:"じゆう", meaning:"자유"}, {kanji:"安全", reading:"あんぜん", meaning:"안전"},
-      {kanji:"危険", reading:"きけん", meaning:"위험"}, {kanji:"複雑", reading:"ふくざつ", meaning:"복잡"},
-      {kanji:"簡単", reading:"かんたん", meaning:"간단"}, {kanji:"影響", reading:"えいきょう", meaning:"영향"},
-      {kanji:"提出", reading:"ていしゅつ", meaning:"제출"}, {kanji:"連絡", reading:"れんらく", meaning:"연락"},
-      {kanji:"参加", reading:"さんか", meaning:"참가"}, {kanji:"利用", reading:"りよう", meaning:"이용"},
-      {kanji:"選択", reading:"せんたく", meaning:"선택"}, {kanji:"確認", reading:"かくにん", meaning:"확인"},
-      {kanji:"比較", reading:"ひかく", meaning:"비교"}, {kanji:"成長", reading:"せいちょう", meaning:"성장"},
-      {kanji:"努力", reading:"どりょく", meaning:"노력"}, {kanji:"達成", reading:"たっせい", meaning:"달성"},
-      {kanji:"興味", reading:"きょうみ", meaning:"흥미"}, {kanji:"態度", reading:"たいど", meaning:"태도"},
-      {kanji:"印象", reading:"いんしょう", meaning:"인상"}, {kanji:"判断", reading:"はんだん", meaning:"판단"},
-      {kanji:"解決", reading:"かいけつ", meaning:"해결"}, {kanji:"原因", reading:"げんいん", meaning:"원인"},
-      {kanji:"結果", reading:"けっか", meaning:"결과"}, {kanji:"方法", reading:"ほうほう", meaning:"방법"},
-      {kanji:"条件", reading:"じょうけん", meaning:"조건"}, {kanji:"状況", reading:"じょうきょう", meaning:"상황"},
-      {kanji:"関係", reading:"かんけい", meaning:"관계"}, {kanji:"環境", reading:"かんきょう", meaning:"환경"}
+      {kanji:"私", reading:"わたし", meaning:"나"}, {kanji:"あなた", reading:"あなた", meaning:"당신"}, {kanji:"彼", reading:"かれ", meaning:"그(남자)"}, {kanji:"彼女", reading:"かのじょ", meaning:"그녀"}, {kanji:"学生", reading:"がくせい", meaning:"학생"}, {kanji:"会社員", reading:"かいしゃいん", meaning:"회사원"}, {kanji:"医者", reading:"いしゃ", meaning:"의사"}, {kanji:"看護師", reading:"かんごし", meaning:"간호사"}, {kanji:"警官", reading:"けいかん", meaning:"경찰관"}, {kanji:"店員", reading:"てんいん", meaning:"점원"}, {kanji:"運転手", reading:"うんてんしゅ", meaning:"운전기사"}, {kanji:"外国人", reading:"がいこくじん", meaning:"외국인"}, {kanji:"名前", reading:"なまえ", meaning:"이름"}, {kanji:"国", reading:"くに", meaning:"나라"}, {kanji:"言葉", reading:"ことば", meaning:"말 / 단어"}, {kanji:"意味", reading:"いみ", meaning:"의미"}, {kanji:"答え", reading:"こたえ", meaning:"대답"}, {kanji:"番号", reading:"ばんごう", meaning:"번호"}, {kanji:"部屋", reading:"へや", meaning:"방"}, {kanji:"玄関", reading:"げんかん", meaning:"현관"}, {kanji:"屋上", reading:"おくじょう", meaning:"옥상"}, {kanji:"階段", reading:"かいだん", meaning:"계단"}, {kanji:"廊下", reading:"ろうか", meaning:"복도"}, {kanji:"壁", reading:"かべ", meaning:"벽"}, {kanji:"天井", reading:"てんじょう", meaning:"천장"}, {kanji:"床", reading:"ゆか", meaning:"바닥"}, {kanji:"鍵", reading:"かぎ", meaning:"열쇠"}, {kanji:"財布", reading:"さいふ", meaning:"지갑"}, {kanji:"眼鏡", reading:"めがね", meaning:"안경"}, {kanji:"靴下", reading:"くつした", meaning:"양말"}, {kanji:"手袋", reading:"てぶくろ", meaning:"장갑"}, {kanji:"一", reading:"いち", meaning:"1(하나)"}, {kanji:"二", reading:"に", meaning:"2(둘)"}, {kanji:"三", reading:"さん", meaning:"3(셋)"}, {kanji:"十", reading:"じゅう", meaning:"10(열)"}, {kanji:"千", reading:"せん", meaning:"1000(천)"}, {kanji:"何", reading:"なに", meaning:"무엇"}, {kanji:"誰", reading:"だれ", meaning:"누구"}, {kanji:"いつ", reading:"いつ", meaning:"언제"}, {kanji:"どこ", reading:"どこ", meaning:"어디"}
+    ]
+  },
+  n5_3: {
+    name: "JLPT N5 3단계", glyph: "五", tag: "JLPT N5-3",
+    desc: "일상 동작 동사", showKanji:true,
+    words: [
+      {kanji:"洗う", reading:"あらう", meaning:"씻다"}, {kanji:"磨く", reading:"みがく", meaning:"닦다"}, {kanji:"拭く", reading:"ふく", meaning:"닦다(훔치다)"}, {kanji:"掃除する", reading:"そうじする", meaning:"청소하다"}, {kanji:"洗濯する", reading:"せんたくする", meaning:"빨래하다"}, {kanji:"料理する", reading:"りょうりする", meaning:"요리하다"}, {kanji:"切る", reading:"きる", meaning:"자르다"}, {kanji:"焼く", reading:"やく", meaning:"굽다"}, {kanji:"煮る", reading:"にる", meaning:"삶다 / 조리다"}, {kanji:"混ぜる", reading:"まぜる", meaning:"섞다"}, {kanji:"温める", reading:"あたためる", meaning:"데우다"}, {kanji:"冷やす", reading:"ひやす", meaning:"식히다"}, {kanji:"運ぶ", reading:"はこぶ", meaning:"옮기다 / 나르다"}, {kanji:"持つ", reading:"もつ", meaning:"들다 / 가지다"}, {kanji:"押す", reading:"おす", meaning:"밀다"}, {kanji:"引く", reading:"ひく", meaning:"당기다"}, {kanji:"動く", reading:"うごく", meaning:"움직이다"}, {kanji:"止まる", reading:"とまる", meaning:"멈추다"}, {kanji:"走る", reading:"はしる", meaning:"달리다"}, {kanji:"歩く", reading:"あるく", meaning:"걷다"}, {kanji:"泳ぐ", reading:"およぐ", meaning:"수영하다"}, {kanji:"登る", reading:"のぼる", meaning:"오르다"}, {kanji:"座る", reading:"すわる", meaning:"앉다"}, {kanji:"立つ", reading:"たつ", meaning:"서다"}, {kanji:"入る", reading:"はいる", meaning:"들어가다"}, {kanji:"出る", reading:"でる", meaning:"나가다"}, {kanji:"帰る", reading:"かえる", meaning:"돌아가다"}, {kanji:"着く", reading:"つく", meaning:"도착하다"}, {kanji:"送る", reading:"おくる", meaning:"보내다"}, {kanji:"届く", reading:"とどく", meaning:"도착하다(물건이)"}, {kanji:"渡す", reading:"わたす", meaning:"건네다"}, {kanji:"借りる", reading:"かりる", meaning:"빌리다"}, {kanji:"返す", reading:"かえす", meaning:"돌려주다"}, {kanji:"貸す", reading:"かす", meaning:"빌려주다"}, {kanji:"忘れる", reading:"わすれる", meaning:"잊다"}, {kanji:"覚える", reading:"おぼえる", meaning:"기억하다 / 외우다"}, {kanji:"探す", reading:"さがす", meaning:"찾다"}, {kanji:"見つける", reading:"みつける", meaning:"발견하다"}, {kanji:"決める", reading:"きめる", meaning:"정하다"}, {kanji:"変える", reading:"かえる", meaning:"바꾸다"}
+    ]
+  },
+  n5_4: {
+    name: "JLPT N5 4단계", glyph: "五", tag: "JLPT N5-4",
+    desc: "형용사·부사 확장", showKanji:true,
+    words: [
+      {kanji:"明るい", reading:"あかるい", meaning:"밝다"}, {kanji:"暗い", reading:"くらい", meaning:"어둡다"}, {kanji:"強い", reading:"つよい", meaning:"강하다"}, {kanji:"弱い", reading:"よわい", meaning:"약하다"}, {kanji:"早い", reading:"はやい", meaning:"이르다 / 빠르다"}, {kanji:"遅い", reading:"おそい", meaning:"늦다 / 느리다"}, {kanji:"近い", reading:"ちかい", meaning:"가깝다"}, {kanji:"遠い", reading:"とおい", meaning:"멀다"}, {kanji:"重い", reading:"おもい", meaning:"무겁다"}, {kanji:"軽い", reading:"かるい", meaning:"가볍다"}, {kanji:"厚い", reading:"あつい", meaning:"두껍다"}, {kanji:"薄い", reading:"うすい", meaning:"얇다"}, {kanji:"太い", reading:"ふとい", meaning:"굵다"}, {kanji:"細い", reading:"ほそい", meaning:"가늘다"}, {kanji:"深い", reading:"ふかい", meaning:"깊다"}, {kanji:"浅い", reading:"あさい", meaning:"얕다"}, {kanji:"広い", reading:"ひろい", meaning:"넓다"}, {kanji:"狭い", reading:"せまい", meaning:"좁다"}, {kanji:"静か", reading:"しずか", meaning:"조용함"}, {kanji:"賑やか", reading:"にぎやか", meaning:"활기참 / 북적임"}, {kanji:"便利", reading:"べんり", meaning:"편리함"}, {kanji:"不便", reading:"ふべん", meaning:"불편함"}, {kanji:"丈夫", reading:"じょうぶ", meaning:"튼튼함"}, {kanji:"上手", reading:"じょうず", meaning:"잘함 / 능숙함"}, {kanji:"下手", reading:"へた", meaning:"서투름"}, {kanji:"大切", reading:"たいせつ", meaning:"소중함"}, {kanji:"有名", reading:"ゆうめい", meaning:"유명함"}, {kanji:"親切", reading:"しんせつ", meaning:"친절함"}, {kanji:"熱心", reading:"ねっしん", meaning:"열심임"}, {kanji:"とても", reading:"とても", meaning:"매우"}, {kanji:"少し", reading:"すこし", meaning:"조금"}, {kanji:"たくさん", reading:"たくさん", meaning:"많이"}, {kanji:"全部", reading:"ぜんぶ", meaning:"전부"}, {kanji:"一緒に", reading:"いっしょに", meaning:"함께"}, {kanji:"いつも", reading:"いつも", meaning:"항상"}, {kanji:"時々", reading:"ときどき", meaning:"가끔"}, {kanji:"たぶん", reading:"たぶん", meaning:"아마"}, {kanji:"もちろん", reading:"もちろん", meaning:"물론"}, {kanji:"すぐに", reading:"すぐに", meaning:"곧 / 바로"}, {kanji:"やっと", reading:"やっと", meaning:"마침내"}
+    ]
+  },
+  n4_1: {
+    name: "JLPT N4 1단계", glyph: "四", tag: "JLPT N4-1",
+    desc: "추상 명사 중심 어휘", showKanji:true,
+    words: [
+      {kanji:"経験", reading:"けいけん", meaning:"경험"}, {kanji:"準備", reading:"じゅんび", meaning:"준비"}, {kanji:"説明", reading:"せつめい", meaning:"설명"}, {kanji:"経済", reading:"けいざい", meaning:"경제"}, {kanji:"社会", reading:"しゃかい", meaning:"사회"}, {kanji:"文化", reading:"ぶんか", meaning:"문화"}, {kanji:"歴史", reading:"れきし", meaning:"역사"}, {kanji:"理由", reading:"りゆう", meaning:"이유"}, {kanji:"性格", reading:"せいかく", meaning:"성격"}, {kanji:"習慣", reading:"しゅうかん", meaning:"습관"}, {kanji:"必要", reading:"ひつよう", meaning:"필요"}, {kanji:"可能", reading:"かのう", meaning:"가능"}, {kanji:"自由", reading:"じゆう", meaning:"자유"}, {kanji:"安全", reading:"あんぜん", meaning:"안전"}, {kanji:"危険", reading:"きけん", meaning:"위험"}, {kanji:"複雑", reading:"ふくざつ", meaning:"복잡"}, {kanji:"簡単", reading:"かんたん", meaning:"간단"}, {kanji:"影響", reading:"えいきょう", meaning:"영향"}, {kanji:"提出", reading:"ていしゅつ", meaning:"제출"}, {kanji:"連絡", reading:"れんらく", meaning:"연락"}, {kanji:"参加", reading:"さんか", meaning:"참가"}, {kanji:"利用", reading:"りよう", meaning:"이용"}, {kanji:"選択", reading:"せんたく", meaning:"선택"}, {kanji:"確認", reading:"かくにん", meaning:"확인"}, {kanji:"比較", reading:"ひかく", meaning:"비교"}, {kanji:"成長", reading:"せいちょう", meaning:"성장"}, {kanji:"努力", reading:"どりょく", meaning:"노력"}, {kanji:"達成", reading:"たっせい", meaning:"달성"}, {kanji:"興味", reading:"きょうみ", meaning:"흥미"}, {kanji:"態度", reading:"たいど", meaning:"태도"}, {kanji:"印象", reading:"いんしょう", meaning:"인상"}, {kanji:"判断", reading:"はんだん", meaning:"판단"}, {kanji:"解決", reading:"かいけつ", meaning:"해결"}, {kanji:"原因", reading:"げんいん", meaning:"원인"}, {kanji:"結果", reading:"けっか", meaning:"결과"}, {kanji:"方法", reading:"ほうほう", meaning:"방법"}, {kanji:"条件", reading:"じょうけん", meaning:"조건"}, {kanji:"状況", reading:"じょうきょう", meaning:"상황"}, {kanji:"関係", reading:"かんけい", meaning:"관계"}, {kanji:"環境", reading:"かんきょう", meaning:"환경"}
+    ]
+  },
+  n4_2: {
+    name: "JLPT N4 2단계", glyph: "四", tag: "JLPT N4-2",
+    desc: "동사 확장", showKanji:true,
+    words: [
+      {kanji:"続ける", reading:"つづける", meaning:"계속하다"}, {kanji:"始める", reading:"はじめる", meaning:"시작하다"}, {kanji:"終わる", reading:"おわる", meaning:"끝나다"}, {kanji:"頑張る", reading:"がんばる", meaning:"노력하다 / 힘내다"}, {kanji:"慣れる", reading:"なれる", meaning:"익숙해지다"}, {kanji:"困る", reading:"こまる", meaning:"곤란하다"}, {kanji:"悩む", reading:"なやむ", meaning:"고민하다"}, {kanji:"迷う", reading:"まよう", meaning:"망설이다 / 헤매다"}, {kanji:"諦める", reading:"あきらめる", meaning:"포기하다"}, {kanji:"挑戦する", reading:"ちょうせんする", meaning:"도전하다"}, {kanji:"成功する", reading:"せいこうする", meaning:"성공하다"}, {kanji:"失敗する", reading:"しっぱいする", meaning:"실패하다"}, {kanji:"検討する", reading:"けんとうする", meaning:"검토하다"}, {kanji:"相談する", reading:"そうだんする", meaning:"상담하다"}, {kanji:"説得する", reading:"せっとくする", meaning:"설득하다"}, {kanji:"反対する", reading:"はんたいする", meaning:"반대하다"}, {kanji:"賛成する", reading:"さんせいする", meaning:"찬성하다"}, {kanji:"提案する", reading:"ていあんする", meaning:"제안하다"}, {kanji:"招待する", reading:"しょうたいする", meaning:"초대하다"}, {kanji:"断る", reading:"ことわる", meaning:"거절하다"}, {kanji:"許す", reading:"ゆるす", meaning:"용서하다 / 허락하다"}, {kanji:"疑う", reading:"うたがう", meaning:"의심하다"}, {kanji:"信じる", reading:"しんじる", meaning:"믿다"}, {kanji:"誤解する", reading:"ごかいする", meaning:"오해하다"}, {kanji:"対応する", reading:"たいおうする", meaning:"대응하다"}, {kanji:"対策", reading:"たいさく", meaning:"대책"}, {kanji:"増える", reading:"ふえる", meaning:"늘다"}, {kanji:"減る", reading:"へる", meaning:"줄다"}, {kanji:"上がる", reading:"あがる", meaning:"오르다"}, {kanji:"下がる", reading:"さがる", meaning:"내리다"}, {kanji:"変わる", reading:"かわる", meaning:"변하다"}, {kanji:"進む", reading:"すすむ", meaning:"나아가다 / 진행되다"}, {kanji:"遅れる", reading:"おくれる", meaning:"늦다 / 지각하다"}, {kanji:"間に合う", reading:"まにあう", meaning:"시간에 맞추다"}, {kanji:"集まる", reading:"あつまる", meaning:"모이다"}, {kanji:"集める", reading:"あつめる", meaning:"모으다"}, {kanji:"分ける", reading:"わける", meaning:"나누다"}, {kanji:"比べる", reading:"くらべる", meaning:"비교하다"}, {kanji:"数える", reading:"かぞえる", meaning:"세다"}, {kanji:"測る", reading:"はかる", meaning:"재다 / 측정하다"}
+    ]
+  },
+  n4_3: {
+    name: "JLPT N4 3단계", glyph: "四", tag: "JLPT N4-3",
+    desc: "형용사·부사·추상 개념", showKanji:true,
+    words: [
+      {kanji:"具体的", reading:"ぐたいてき", meaning:"구체적"}, {kanji:"抽象的", reading:"ちゅうしょうてき", meaning:"추상적"}, {kanji:"積極的", reading:"せっきょくてき", meaning:"적극적"}, {kanji:"消極的", reading:"しょうきょくてき", meaning:"소극적"}, {kanji:"一般的", reading:"いっぱんてき", meaning:"일반적"}, {kanji:"個人的", reading:"こじんてき", meaning:"개인적"}, {kanji:"社会的", reading:"しゃかいてき", meaning:"사회적"}, {kanji:"経済的", reading:"けいざいてき", meaning:"경제적"}, {kanji:"効果的", reading:"こうかてき", meaning:"효과적"}, {kanji:"正確", reading:"せいかく", meaning:"정확함"}, {kanji:"曖昧", reading:"あいまい", meaning:"애매함"}, {kanji:"完全", reading:"かんぜん", meaning:"완전함"}, {kanji:"十分", reading:"じゅうぶん", meaning:"충분함"}, {kanji:"不足", reading:"ふそく", meaning:"부족함"}, {kanji:"余分", reading:"よぶん", meaning:"여분"}, {kanji:"平気", reading:"へいき", meaning:"아무렇지 않음 / 괜찮음"}, {kanji:"得意", reading:"とくい", meaning:"잘하는 것 / 자신 있음"}, {kanji:"苦手", reading:"にがて", meaning:"서투른 것 / 싫어함"}, {kanji:"意外", reading:"いがい", meaning:"의외임"}, {kanji:"当然", reading:"とうぜん", meaning:"당연함"}, {kanji:"確実", reading:"かくじつ", meaning:"확실함"}, {kanji:"可能性", reading:"かのうせい", meaning:"가능성"}, {kanji:"必然", reading:"ひつぜん", meaning:"필연"}, {kanji:"偶然", reading:"ぐうぜん", meaning:"우연"}, {kanji:"突然", reading:"とつぜん", meaning:"갑자기"}, {kanji:"急に", reading:"きゅうに", meaning:"갑자기"}, {kanji:"次第に", reading:"しだいに", meaning:"점차"}, {kanji:"徐々に", reading:"じょじょに", meaning:"서서히"}, {kanji:"実際に", reading:"じっさいに", meaning:"실제로"}, {kanji:"実は", reading:"じつは", meaning:"사실은"}, {kanji:"一方", reading:"いっぽう", meaning:"한편"}, {kanji:"むしろ", reading:"むしろ", meaning:"오히려"}, {kanji:"かえって", reading:"かえって", meaning:"오히려 / 도리어"}, {kanji:"さらに", reading:"さらに", meaning:"게다가 / 더욱"}, {kanji:"したがって", reading:"したがって", meaning:"따라서"}, {kanji:"つまり", reading:"つまり", meaning:"즉 / 결국"}, {kanji:"例えば", reading:"たとえば", meaning:"예를 들면"}, {kanji:"もし", reading:"もし", meaning:"만약"}, {kanji:"万が一", reading:"まんがいち", meaning:"만일"}, {kanji:"とにかく", reading:"とにかく", meaning:"어쨌든"}
+    ]
+  },
+  n4_4: {
+    name: "JLPT N4 4단계", glyph: "四", tag: "JLPT N4-4",
+    desc: "사회·경제·비즈니스 심화", showKanji:true,
+    words: [
+      {kanji:"政府", reading:"せいふ", meaning:"정부"}, {kanji:"国民", reading:"こくみん", meaning:"국민"}, {kanji:"制度", reading:"せいど", meaning:"제도"}, {kanji:"政策", reading:"せいさく", meaning:"정책"}, {kanji:"予算", reading:"よさん", meaning:"예산"}, {kanji:"財政", reading:"ざいせい", meaning:"재정"}, {kanji:"企業", reading:"きぎょう", meaning:"기업"}, {kanji:"業界", reading:"ぎょうかい", meaning:"업계"}, {kanji:"市場", reading:"しじょう", meaning:"(경제)시장"}, {kanji:"需要", reading:"じゅよう", meaning:"수요"}, {kanji:"供給", reading:"きょうきゅう", meaning:"공급"}, {kanji:"価格", reading:"かかく", meaning:"가격"}, {kanji:"物価", reading:"ぶっか", meaning:"물가"}, {kanji:"収入", reading:"しゅうにゅう", meaning:"수입(소득)"}, {kanji:"支出", reading:"ししゅつ", meaning:"지출"}, {kanji:"貯金", reading:"ちょきん", meaning:"저금"}, {kanji:"投資", reading:"とうし", meaning:"투자"}, {kanji:"保険", reading:"ほけん", meaning:"보험"}, {kanji:"契約書", reading:"けいやくしょ", meaning:"계약서"}, {kanji:"手続き", reading:"てつづき", meaning:"절차 / 수속"}, {kanji:"申請", reading:"しんせい", meaning:"신청"}, {kanji:"許可", reading:"きょか", meaning:"허가"}, {kanji:"禁止", reading:"きんし", meaning:"금지"}, {kanji:"規則", reading:"きそく", meaning:"규칙"}, {kanji:"制限", reading:"せいげん", meaning:"제한"}, {kanji:"権利", reading:"けんり", meaning:"권리"}, {kanji:"義務", reading:"ぎむ", meaning:"의무"}, {kanji:"平等", reading:"びょうどう", meaning:"평등"}, {kanji:"差別", reading:"さべつ", meaning:"차별"}, {kanji:"環境問題", reading:"かんきょうもんだい", meaning:"환경 문제"}, {kanji:"温暖化", reading:"おんだんか", meaning:"온난화"}, {kanji:"資源", reading:"しげん", meaning:"자원"}, {kanji:"節約", reading:"せつやく", meaning:"절약"}, {kanji:"消費", reading:"しょうひ", meaning:"소비"}, {kanji:"生産", reading:"せいさん", meaning:"생산"}, {kanji:"技術革新", reading:"ぎじゅつかくしん", meaning:"기술 혁신"}, {kanji:"情報", reading:"じょうほう", meaning:"정보"}, {kanji:"情報化", reading:"じょうほうか", meaning:"정보화"}, {kanji:"国際的", reading:"こくさいてき", meaning:"국제적"}, {kanji:"世界的", reading:"せかいてき", meaning:"세계적"}
     ]
   }
 };
@@ -832,6 +841,22 @@ const GROUPS = {
   hiragana: {
     name: "히라가나", glyph: "あ", desc: "단계별 문자 연습 (1~4단계)",
     subs: ["hiragana1","hiragana2","hiragana3","hiragana4"]
+  },
+  katakana: {
+    name: "가타카나", glyph: "ア", desc: "단계별 외래어 연습 (1~4단계)",
+    subs: ["katakana1","katakana2","katakana3","katakana4"]
+  },
+  kanji: {
+    name: "한자 읽기 연습", glyph: "読", desc: "단계별 한자 읽기 연습 (1~4단계)",
+    subs: ["kanji1","kanji2","kanji3","kanji4"]
+  },
+  n5: {
+    name: "JLPT N5 어휘", glyph: "五", desc: "단계별 N5 어휘 (1~4단계)",
+    subs: ["n5_1","n5_2","n5_3","n5_4"]
+  },
+  n4: {
+    name: "JLPT N4 어휘", glyph: "四", desc: "단계별 N4 어휘 (1~4단계)",
+    subs: ["n4_1","n4_2","n4_3","n4_4"]
   }
 };
 const GROUPED_KEYS = new Set(Object.values(GROUPS).flatMap(g=>g.subs));
@@ -1233,11 +1258,11 @@ function openStudyList(key, ev){
   body.innerHTML = `<div class="study-list">${lv.words.map((w,i)=>`
     <div class="study-item">
       <span class="study-idx">${i+1}</span>
-      <div class="study-word">
-        ${lv.showKanji ? `<div class="study-kanji">${w.kanji}</div>` : ''}
-        <div class="study-reading">${w.reading}</div>
-        <div class="study-meaning">${w.meaning}</div>
+      <div class="study-jp">
+        ${lv.showKanji ? `<span class="study-kanji">${w.kanji}</span>` : ''}
+        <span class="study-reading">${w.reading}</span>
       </div>
+      <div class="study-meaning">${w.meaning}</div>
       <button class="study-speak" data-reading="${w.reading}">🔊</button>
     </div>`).join('')}</div>`;
   body.querySelectorAll('.study-speak').forEach(btn=>{
