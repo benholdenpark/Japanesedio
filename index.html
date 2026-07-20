@@ -130,7 +130,13 @@
   .study-jp{min-width:0; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
   .study-kanji{font-family:'Shippori Mincho', serif; font-weight:700; font-size:22px; color:var(--sumi); line-height:1.3;}
   .study-reading{font-family:'Shippori Mincho', serif; font-size:19px; font-weight:700; color:var(--ai-deep); line-height:1.3;}
-  .study-meaning{font-size:13.5px; color:var(--sumi-soft); line-height:1.4;}
+  .study-meaning{
+    font-size:13.5px; color:var(--sumi-soft); line-height:1.4; cursor:pointer;
+    padding:5px 8px; border-radius:6px; background:#EFE7D3; border:1px dashed #C9BFA6; text-align:center;
+  }
+  .study-meaning.revealed{
+    background:none; border:none; color:var(--sumi-soft); text-align:left; padding:0;
+  }
   .study-speak{
     width:32px; height:32px; border-radius:50%; border:none; background:var(--ai-pale); color:var(--ai-deep);
     font-size:14px; cursor:pointer; flex:0 0 auto;
@@ -860,7 +866,7 @@ const GROUPS = {
   }
 };
 const GROUPED_KEYS = new Set(Object.values(GROUPS).flatMap(g=>g.subs));
-let expandedGroups = new Set(["hiragana"]);
+let expandedGroups = new Set();
 
 function toggleGroupSelection(groupKey, ev){
   ev.stopPropagation();
@@ -1262,11 +1268,22 @@ function openStudyList(key, ev){
         ${lv.showKanji ? `<span class="study-kanji">${w.kanji}</span>` : ''}
         <span class="study-reading">${w.reading}</span>
       </div>
-      <div class="study-meaning">${w.meaning}</div>
+      <div class="study-meaning" data-meaning="${w.meaning}">뜻 보기</div>
       <button class="study-speak" data-reading="${w.reading}">🔊</button>
     </div>`).join('')}</div>`;
   body.querySelectorAll('.study-speak').forEach(btn=>{
     btn.onclick = () => speakWord(btn.dataset.reading);
+  });
+  body.querySelectorAll('.study-meaning').forEach(el=>{
+    el.onclick = () => {
+      if(el.classList.contains('revealed')){
+        el.classList.remove('revealed');
+        el.textContent = '뜻 보기';
+      } else {
+        el.classList.add('revealed');
+        el.textContent = el.dataset.meaning;
+      }
+    };
   });
   document.getElementById('modal-study').classList.add('show');
 }
