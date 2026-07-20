@@ -374,7 +374,7 @@
       <div class="stepper">
         <button class="step-btn" onclick="changeCount(-1)">−</button>
         <input class="step-count-input" id="countDisplay" type="number" inputmode="numeric"
-               min="4" max="80" value="18"
+               min="4" max="80" value="40"
                onchange="setCountFromInput(this.value)" onblur="setCountFromInput(this.value)">
         <button class="step-btn" onclick="changeCount(1)">+</button>
       </div>
@@ -699,7 +699,7 @@ const LEVELS = {
 
 /* ---------- State ---------- */
 let selectedLevels = new Set(["hiragana1"]);
-let lessonCount = 18;
+let lessonCount = 40;
 let freeMode = false;
 
 let queue = [];          // words for this run
@@ -1053,7 +1053,7 @@ function giveUp(){
   renderAnswerSlot(target.length);
   flashFeedback(false, "정답: " + current.reading);
   speakWord(current.reading);
-  setTimeout(()=>{ qIndex++; loadWord(); }, 1100);
+  setTimeout(()=>{ qIndex++; loadWord(); }, 3000);
 }
 
 function handleCorrect(){
